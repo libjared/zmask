@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    vim:sw=4:ts=4:et:
+-->
+<project name="zmask" default="default" basedir=".">
+    <property name="version" value="0.1alpha1"/>
+
+    <description>Builds, tests, and runs the project zmask.</description>
+    <property name="src" value="src"/>
+    <property name="build" value="build"/>
+    <property name="dist" value="dist"/>
+    <property name="doc" value="doc"/>
+
+    <target name="default" depends="compile" />
+    <target name="dist" depends="jar, war, src-tar" />
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <mkdir dir="${build}/classes"/>
+        <javac srcdir="${src}" destdir="${build}/classes" debug="on"
+                classpath="" includeantruntime="false">
+            <compilerarg value="-Xlint" />
+        </javac>
+        <copy todir="${build}/classes">
+            <fileset dir="${src}" casesensitive="yes">
+                <patternset id="resources">
+                    <include name="org/zkt/zmask/resources/*" />
+                    <include name="org/zkt/zmask/resources/toolbaricons/*" />
+                    <include name="org/zkt/zmask/masks/resources/*" />
+                </patternset>
+            </fileset>
+        </copy>
+        <propertyfile file="${build}/classes/org/zkt/zmask/resources/Version.properties">
+            <entry key="version" type="string" value="${version}" />
+        </propertyfile>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${dist}/Zmask.jar" basedir="${build}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="org.zkt.zmask.Zmask"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="war" depends="compile">
+        <war warfile="${dist}/Zmask.war" webxml="${src}/web.xml">
+            <classes dir="${build}/classes"/>
+        </war>
+    </target>
+
+    <target name="src-tar" depends="init, doc">
+        <tar destfile="${dist}/zmask-${version}.tar.gz" compression="gzip">
+            <tarfileset dir="." prefix="zmask-${version}">
+                <!-- Include everything but misc, plus generated docs -->
+                <include name="src/**"/>
+                <include name="doc/**"/>
+                <include name="COPYING"/>
+                <include name="build.xml"/>
+            </tarfileset>
+        </tar>
+    </target>
+
+    <target name="doc">
+        <mkdir dir="${doc}"/>
+        <javadoc packagenames="org.zkt.zmask.*"
+                   sourcepath="${src}"
+                   defaultexcludes="yes"
+                   destdir="${doc}/api">
+        </javadoc>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+
+    <target name="distclean" depends="clean">
+        <delete dir="${doc}"/>
+    </target>
+
+</project>

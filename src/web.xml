@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for SwingSet2 Demo Application -->
+<jnlp
+  spec="1.0+"
+  codebase="http://my_company.com/jaws/apps"
+  href="Zview.jnlp">
+  <information>
+    <title>Zview</title>
+    <vendor>zkt</vendor>
+    <homepage href="docs/help.html"/>
+    <description>Zview image masker/unmasker</description>
+    <offline-allowed/>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.5.0"/>
+  </resources>
+  <application-desc main-class="org.zkt.zmask.Zmask"/>
+</jnlp>

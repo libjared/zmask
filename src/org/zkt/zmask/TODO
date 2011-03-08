@@ -1,0 +1,61 @@
+Improvments
+* Webstart
+  - Test (and fix)
+* Statusbar
+  - Boxes should be able to grow, but have a fixed min
+    that fits most coords, and only grow in fixed increments at need
+  - Icon for each box
+  - Resize box(es) (e.g. zoom)
+  - Selection description
+  - Image info (size)
+  - Number of undo/redo items?
+  - Drawing a bit too slow; render boxes more statically + drawImage?
+* What to do with State?
+  - Singleton?
+  - Move methods out?
+    - Tool class? Better separation between image and tools? Selection object
+      to be put in imagechange? Tool stroke in specific tool class?
+    - More methods in the respective class?
+    - A more clean helper?
+* Shortcut keys - does not work
+* zoom (view menu)
+  - 1:1
+  - fit to window
+  - pre def zoom levels
+* image menu
+ - select all
+ - select none
+* Rename image class? to avoid confustion with image interface..
+* Preview in open dialog
+* Hand tool resets when outside the window
+* Save dialog should warn if jpeg|png and xor in path
+* Cut/Copy/Paste
+  - http://www.velocityreviews.com/forums/t136873-cut-and-paste-images.html
+* About dialog is crap
+  - No idea how that layout works, but it is very static. replace.
+  - License box not wide enough
+* Double-click with select to do "wand" selection
+
+Masks
+* CP [detect?]
+* B3
+* Nijiiro
+
+Testing
+* Unit tests for history handling (index images and such)
+
+Features
+* Solve dialouge (avoid printing unneccessary steps)
+  - zoom out blocksize times and use blocksize = 1px
+  - only handle the selected area
+* Tree-based undo
+* Print path, add optimize to path
+* Checkpointing undo history ("fast-forward undo / redo")
+* Execute path, possibility to execute selection (and settings?)
+* Printing
+  - http://java.sun.com/docs/books/tutorial/2d/printing/index.html
+* Other solution of undo menu
+  - http://java.dzone.com/news/drop-down-buttons-swing-new-al
+* Implement Image class that can be .compress()ed
+* Implement Image eviction in ImageChange (recreate event/reverse event on next
+  or prev image)
