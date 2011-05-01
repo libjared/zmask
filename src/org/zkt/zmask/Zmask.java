@@ -19,6 +19,12 @@
 package org.zkt.zmask;
 
 import java.util.ResourceBundle;
+import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 
 /**
  * The application's main class.
@@ -30,6 +36,8 @@ public class Zmask {
 
 	public static final String VERSION = ResourceBundle.getBundle("org.zkt.zmask.resources.Version").getString("version");
 
+	private static Properties properties;
+
 	/**
 	 * Main method launching the application.
 	 */
@@ -40,6 +48,52 @@ public class Zmask {
 
 	public static ZmaskFrame getFrame() {
 		return frame;
+	}
+
+	public static Properties getProperties() {
+		if (properties == null) {
+			properties = new Properties();
+			String path;
+			FileInputStream is;
+			File file;
+
+			/* Load the default settings */
+			try {
+				file = new File(Zmask.class.getResource("org.zkt.zmask.resources.DefaultProperties").toURI());
+				is = new FileInputStream(file);
+				properties.load(is);
+				is.close();
+			}
+			catch (Exception e) {
+				// This will not fail, promise
+			}
+
+			/* Overload user-supplied settings */
+			try {
+				path = System.getProperty("user.home") + "/.zmaskrc";
+			}
+			catch (SecurityException e) {
+				// TODO: alert user
+				e.printStackTrace();
+				return properties;
+			}
+
+			try {
+				is = new FileInputStream(path);
+				properties.load(is);
+				is.close();
+
+			}
+			catch (FileNotFoundException e) {
+				// It's ok.
+			}
+			catch (IOException e) {
+				// TODO: alert user
+				e.printStackTrace();
+			}
+		}
+
+		return properties;
 	}
 
 }
