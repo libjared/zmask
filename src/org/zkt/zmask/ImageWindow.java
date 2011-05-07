@@ -111,17 +111,13 @@ public class ImageWindow extends JInternalFrame {
 		setVisible(true);
 	}
 
-	private void updateTitle() {
+	public void updateTitle() {
 		String changedAppend = "";
 		if (imagePanel.isChanged()) {
 			changedAppend = "* ";
 		}
 		setTitle(filename + changedAppend + " [" + imagePanel.getImageWidth()
 			+ "x" + imagePanel.getImageHeight() + "]");
-	}
-
-	public String getFilename() {
-		return filename;
 	}
 
 	public JScrollPane getScrollPane() {

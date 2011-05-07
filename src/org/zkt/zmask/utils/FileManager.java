@@ -53,9 +53,9 @@ public class FileManager {
 		return image;
 	}
 
-	public static boolean save(RenderedImage image, String format,
-			String filename) throws IOException {
-		return ImageIO.write(image, format, new File(filename));
+	public static boolean saveFile(RenderedImage image, String format,
+			File file) throws IOException {
+		return ImageIO.write(image, format, file);
 	}
 
 	private static Map<String, FileNameExtensionFilter> allFilters;

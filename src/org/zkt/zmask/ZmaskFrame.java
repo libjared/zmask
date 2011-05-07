@@ -18,6 +18,7 @@
 
 package org.zkt.zmask;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -448,7 +449,7 @@ public class ZmaskFrame extends JFrame {
 
 		/* Save as file chooser */
 		saveAsFileChooser = new javax.swing.JFileChooser();
-		saveAsFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+		saveAsFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		saveAsFileChooser.setName("saveAsFileChooser");
 		List<FileNameExtensionFilter> saveAsFileChooserFilters = FileManager.generateFileFilters(true);
 		for (FileNameExtensionFilter filter : saveAsFileChooserFilters)
@@ -526,8 +527,8 @@ public class ZmaskFrame extends JFrame {
 		int r = openFileChooser.showOpenDialog(this);
 
 		if (r == JFileChooser.ERROR_OPTION) {
-			// TODO
-			System.out.println("wtf");
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileLoadFaultySelection.title"), resources.getString("fileLoadFaultySelection.text"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
@@ -540,14 +541,22 @@ public class ZmaskFrame extends JFrame {
 			image = FileManager.loadFile(file);
 		}
 		catch (IOException e) {
-			// TODO
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileLoadIOError.title"), resources.getString("fileLoadIOError.text"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		// Create window and add to destination desktop pane
 		JDesktopPane destinationContainer = State.getMainDesktopPane();
-		ImageWindow iw = new ImageWindow(file.getName(), image, destinationContainer);
+
+                String name = file.getName();
+		ImageWindow iw = new ImageWindow(name, image, destinationContainer);
+                int lastDot = name.lastIndexOf('.');
+                // neither foo nor .foo is accepted
+                if (lastDot > 0) {
+                        iw.getImagePanel().getImage().setFileAndFormat(file, name.substring(lastDot + 1));
+                }
+
 		destinationContainer.add(iw);
 
 		try {
@@ -559,33 +568,69 @@ public class ZmaskFrame extends JFrame {
 
 	}
 
-	public void saveAction() {
-		// TODO
+	private void saveImage(Image image, String format, File file) {
+		BufferedImage bi = new BufferedImage(image.getImageWidth(), image.getImageHeight(), image.getImageType());
+                image.drawImage((Graphics2D)bi.getGraphics(), 0, 0);
+
+		try {
+			boolean result = FileManager.saveFile(bi, format, file);
+			if (!result)
+				JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveFormatError.text") + " '" + format + "'", resources.getString("fileSaveFormatError.title"), JOptionPane.ERROR_MESSAGE);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveIOError.title"), resources.getString("fileSaveIOError.text"), JOptionPane.ERROR_MESSAGE);
+		}
+
+		image.setFileAndFormat(file, format);
+		image.clearChanged();
 	}
 
-	public void saveAsAction() {
-		// Show
+	public void saveAction() {
+		Image image = State.getCurrentImage();
+
+		File source = image.getFile();
+		if (source == null) {
+			__saveAsAction(image);
+		}
+		else {
+			saveImage(image, image.getFormat(), source);
+		}
+	}
+
+	private void __saveAsAction(Image image) {
 		int r = saveAsFileChooser.showOpenDialog(this);
 
 		if (r == JFileChooser.ERROR_OPTION) {
-			// TODO
-			System.out.println("wtf");
+			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveFaultySelection.title"), resources.getString("fileSaveFaultySelection.text"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		if (r != JFileChooser.APPROVE_OPTION)
 			return;
 
-		/*try {
-			result = FileManager.saveFile();
-		}
-		catch (IOException e) {
-			// TODO
-		}*/
+		File selected = saveAsFileChooser.getSelectedFile();
+                String name = selected.getName();
+		String format = "jpeg";
+                int lastDot = name.lastIndexOf('.');
+                // neither foo nor .foo is accepted
+                if (lastDot > 0) {
+                        format = name.substring(lastDot + 1);
+                }
+
+
+		saveImage(image, format, selected);
+	}
+
+	public void saveAsAction() {
+		Image image = State.getCurrentImage();
+
+		__saveAsAction(image);
 	}
 
 	public void closeAction() {
 		// TODO
+		// image.isChanged();
 	}
 
 	// Undo, redo

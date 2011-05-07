@@ -403,4 +403,13 @@ public class ImagePanel extends JPanel {
 	public int getUIImageHeight() {
 		return (int)(image.getImageHeight() * zoom);
 	}
+
+	public void updateParentWindowTitle() {
+		parentImageWindow.updateTitle();
+	}
+
+	public void updateParentWindowTitle(String filename) {
+		parentImageWindow.setFilename(filename);
+		parentImageWindow.updateTitle();
+	}
 }

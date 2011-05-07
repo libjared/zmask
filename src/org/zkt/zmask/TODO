@@ -35,6 +35,7 @@ Improvments
   - No idea how that layout works, but it is very static. replace.
   - License box not wide enough
 * Double-click with select to do "wand" selection
+* Close should warn if image is changed but not saved
 
 Masks
 * CP [detect?]

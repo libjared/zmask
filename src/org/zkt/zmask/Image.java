@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Deque;
 import java.util.List;
 import java.util.Vector;
@@ -44,6 +45,8 @@ public class Image {
 	private Rectangle selection = null;
 	private Dimension imageSize;
 	private int points = 0;
+	private File file = null;
+	private String format;
 
 	public Image(BufferedImage baseImage, ImagePanel imagePanel) {
 		this.imagePanel = imagePanel;
@@ -135,6 +138,7 @@ public class Image {
 				image.getHeight());
 		}
 		changed = true;
+		imagePanel.updateParentWindowTitle();
 		repaint();
 		State.refreshButtons();
 	}
@@ -178,6 +182,7 @@ public class Image {
 
 		int i;
 		changed = true;
+		imagePanel.updateParentWindowTitle();
 
 		// Move objects from the from stack to the to stack
 		for (i = 0; i < steps; i++) {
@@ -353,8 +358,9 @@ public class Image {
 		return changed;
 	}
 
-	public void save() {
+	public void clearChanged() {
 		changed = false;
+		imagePanel.updateParentWindowTitle();
 	}
 
 	public class StepException extends Exception {
@@ -387,5 +393,19 @@ public class Image {
 		public int getSucceeded() {
 			return succeeded;
 		}
+	}
+
+	public void setFileAndFormat(File file, String format) {
+		this.file = file;
+		this.format = format;
+		imagePanel.updateParentWindowTitle(file.getName());
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public String getFormat() {
+		return format;
 	}
 }
