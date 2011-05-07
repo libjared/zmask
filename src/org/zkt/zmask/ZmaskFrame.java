@@ -527,7 +527,6 @@ public class ZmaskFrame extends JFrame {
 		int r = openFileChooser.showOpenDialog(this);
 
 		if (r == JFileChooser.ERROR_OPTION) {
-			e.printStackTrace();
 			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileLoadFaultySelection.title"), resources.getString("fileLoadFaultySelection.text"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
