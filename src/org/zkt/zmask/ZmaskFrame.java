@@ -370,6 +370,10 @@ public class ZmaskFrame extends JFrame {
 		editMenu.add(createMenuItem("undoMenuItem", "undo", cgUndoPossible, KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK)));
 		editMenu.add(createMenuItem("redoMenuItem", "redo", cgRedoPossible, KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK)));
 
+		editMenu.add(new javax.swing.JPopupMenu.Separator());
+
+		editMenu.add(createMenuItem("propertiesMenuItem", "properties", null, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK)));
+
 		menuBar.add(editMenu);
 
 		/* View menu */
@@ -651,6 +655,15 @@ public class ZmaskFrame extends JFrame {
 		}
 	}
 
+	// Show properties dialog
+	public void propertiesAction() {
+		if (propertiesDialog == null) {
+			propertiesDialog = new ZmaskPropertiesDialog(this);
+			propertiesDialog.setLocationRelativeTo(this);
+		}
+		propertiesDialog.setVisible(true);
+	}
+
 	// Tools
 	public void toolSelectAction() {
 		selectToggleButton.setSelected(true);
@@ -784,6 +797,7 @@ public class ZmaskFrame extends JFrame {
 	private final Timer messageTimer;
 
 	private JDialog aboutBox;
+	private JDialog propertiesDialog;
 
 	private class ActionHandler implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
@@ -808,6 +822,8 @@ public class ZmaskFrame extends JFrame {
 				mekoPlusAction();
 			else if (ac.equals("open"))
 				openAction();
+			else if (ac.equals("properties"))
+				propertiesAction();
 			else if (ac.equals("q0"))
 				q0Action();
 			else if (ac.equals("quit"))

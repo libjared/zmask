@@ -24,6 +24,9 @@ import java.awt.image.ByteLookupTable;
 import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
 import org.zkt.zmask.Image;
+import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyHandler;
 
 /**
  * Rotate RGB of the selection
@@ -110,5 +113,13 @@ public class RGBRotate implements Mask {
 			return dst;
 		}
 
+	}
+
+	public Property[] getProperties() {
+		return null;
+	}
+
+	public PropertyHandler getPropertyHandler() {
+		return null;
 	}
 }

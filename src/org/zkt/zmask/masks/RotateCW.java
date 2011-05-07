@@ -28,6 +28,9 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
 import org.zkt.zmask.tools.Select;
+import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyHandler;
 
 /**
  * Rotate image clockwise
@@ -142,6 +145,14 @@ public class RotateCW implements Mask {
 
 		// Rotate image and add the result
 		image.addImage(ato.filter(bi, null), null, "Rotate 90 degrees clockwise", true, select);
+	}
+
+	public Property[] getProperties() {
+		return null;
+	}
+
+	public PropertyHandler getPropertyHandler() {
+		return null;
 	}
 
 }

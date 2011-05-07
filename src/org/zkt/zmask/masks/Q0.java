@@ -20,6 +20,9 @@ package org.zkt.zmask.masks;
 
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
+import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyHandler;
 
 /**
  * The Q0 mask, basically horizontal+vertical glass and invert
@@ -27,8 +30,10 @@ import org.zkt.zmask.Image;
  * @author zqad
  */
 public class Q0 implements Mask {
-	boolean runHorizontalGlass, runVerticalGlass, runInvert;
-	Mask horizontalGlass, verticalGlass, invert;
+	protected boolean runHorizontalGlass, runVerticalGlass, runInvert;
+	private Mask horizontalGlass, verticalGlass, invert;
+	private Q0PropertyHandler propertyHandler;
+	private Property[] propertyArray;
 
 	public Q0() {
 		horizontalGlass = new HorizontalGlass();
@@ -38,6 +43,16 @@ public class Q0 implements Mask {
 		runHorizontalGlass = true;
 		runVerticalGlass = true;
 		runInvert = true;
+
+		propertyHandler = new Q0PropertyHandler(this);
+
+		/* Cannot assign this directly for whatever reason */
+		Property[] propertyArray = {
+			new Property("runVerticalGlass", Property.TYPE_BOOLEAN, "Run vertical glass"),
+			new Property("runVerticalGlass", Property.TYPE_BOOLEAN, "Run horizontal glass"),
+			new Property("runInvert", Property.TYPE_BOOLEAN, "Run invert"),
+		};
+		this.propertyArray = propertyArray;
 	}
 
 	public String getDescription() {
@@ -73,4 +88,46 @@ public class Q0 implements Mask {
 		throw new UnsupportedOperationException("Not supported.");
 	}
 
+	public Property[] getProperties() {
+		return propertyArray;
+	}
+
+	public PropertyHandler getPropertyHandler() {
+		return propertyHandler;
+	}
+
+	private static class Q0PropertyHandler implements PropertyHandler {
+		Q0 q0;
+
+		protected Q0PropertyHandler(Q0 q0) {
+			this.q0 = q0;
+		}
+
+		public void setProperty(String key, Object value) throws PropertyException {
+			if (key.equals("runVerticalGlass"))
+				q0.runVerticalGlass = ((Boolean)value).booleanValue();
+			else if (key.equals("runHorizontalGlass"))
+				q0.runHorizontalGlass = ((Boolean)value).booleanValue();
+			else if (key.equals("runInvert"))
+				q0.runInvert = ((Boolean)value).booleanValue();
+			else
+				throw new PropertyException(key);
+		}
+
+		public Object getProperty(String key) throws PropertyException {
+			if (key.equals("runVerticalGlass"))
+				return new Boolean(q0.runVerticalGlass);
+			else if (key.equals("runHorizontalGlass"))
+				return new Boolean(q0.runHorizontalGlass);
+			else if (key.equals("runInvert"))
+				return new Boolean(q0.runInvert);
+
+			throw new PropertyException(key);
+		}
+
+		public boolean checkProperty(String key, Object value) throws PropertyException {
+			// All values are valid
+			return true;
+		}
+	}
 }

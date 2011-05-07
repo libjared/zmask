@@ -1,5 +1,5 @@
 /*
- * Mask.java
+ * PropertyException.java
  * Copyright (C) 2010-2011  Jonas Eriksson
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,34 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.zkt.zmask.masks;
-
-import java.awt.image.BufferedImage;
-import org.zkt.zmask.Image;
-import org.zkt.zmask.utils.PropertyHandler;
-import org.zkt.zmask.utils.Property;
+package org.zkt.zmask.utils;
 
 /**
- * Parent interface for masks
- * Interface for masks
+ * Exception class for missing properties
  *
  * @author zqad
  */
-public interface Mask {
+public class PropertyException extends Exception {
 
-	public BufferedImage runMask(BufferedImage image);
+	public static final long serialVersionUID = 1;
 
-	public void runMask(Image image);
+	public PropertyException(String key) {
+		super("No such property: " + key);
+	}
 
-	public boolean needWhole();
-
-	public boolean needClone();
-
-	public boolean runBare();
-
-	public String getDescription();
-
-	public PropertyHandler getPropertyHandler();
-
-	public Property[] getProperties();
 }

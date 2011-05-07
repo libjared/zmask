@@ -1,5 +1,5 @@
 /*
- * Mask.java
+ * PropertyHandler.java
  * Copyright (C) 2010-2011  Jonas Eriksson
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,34 +16,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.zkt.zmask.masks;
+package org.zkt.zmask.utils;
 
-import java.awt.image.BufferedImage;
-import org.zkt.zmask.Image;
-import org.zkt.zmask.utils.PropertyHandler;
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
 
 /**
- * Parent interface for masks
- * Interface for masks
+ * Interface for properties
  *
  * @author zqad
  */
-public interface Mask {
-
-	public BufferedImage runMask(BufferedImage image);
-
-	public void runMask(Image image);
-
-	public boolean needWhole();
-
-	public boolean needClone();
-
-	public boolean runBare();
-
-	public String getDescription();
-
-	public PropertyHandler getPropertyHandler();
-
-	public Property[] getProperties();
+public interface PropertyHandler {
+	public void setProperty(String key, Object value) throws PropertyException;
+	public Object getProperty(String key) throws PropertyException;
+	public boolean checkProperty(String key, Object value) throws PropertyException;
 }

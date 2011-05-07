@@ -21,6 +21,9 @@ package org.zkt.zmask.masks;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
+import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyHandler;
 
 
 /**
@@ -58,5 +61,13 @@ public class FlipHorizontal implements Mask {
 
 	public void runMask(Image image) {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Property[] getProperties() {
+		return null;
+	}
+
+	public PropertyHandler getPropertyHandler() {
+		return null;
 	}
 }

@@ -30,6 +30,9 @@ import java.awt.image.BufferedImageOp;
 import java.awt.image.LookupOp;
 import org.zkt.zmask.Image;
 import org.zkt.zmask.State;
+import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyHandler;
 
 /**
  * The FL mask
@@ -165,6 +168,14 @@ public class FL implements Mask {
 			this.no = no;
 			this.pair = pair;
 		}
+	}
+
+	public Property[] getProperties() {
+		return null;
+	}
+
+	public PropertyHandler getPropertyHandler() {
+		return null;
 	}
 
 }

@@ -20,6 +20,9 @@ package org.zkt.zmask.masks;
 
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
+import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyHandler;
 
 /**
  * Rotate image counter-clockwise
@@ -53,5 +56,13 @@ public class RotateCCW implements Mask {
 
 	public BufferedImage runMask(BufferedImage image) {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public Property[] getProperties() {
+		return null;
+	}
+
+	public PropertyHandler getPropertyHandler() {
+		return null;
 	}
 }

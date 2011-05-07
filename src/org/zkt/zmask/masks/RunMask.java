@@ -22,7 +22,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.LinkedList;
 import org.zkt.zmask.Image;
+import org.zkt.zmask.utils.Property;
 
 /**
  * Runs a mask on image/selection
@@ -78,5 +81,16 @@ public class RunMask {
 			image.addImage(bi, null, mask.getDescription(), false, null);
 		}
 
+	}
+
+	public static List<MaskProperties> getAllMaskProperties() {
+		List<MaskProperties> mp = new LinkedList<MaskProperties>();
+		for (String key : masks.keySet()) {
+			Property[] pa = masks.get(key).getProperties();
+			if (pa != null)
+				// TODO: description
+				mp.add(new MaskProperties(key, key, pa));
+		}
+		return mp;
 	}
 }

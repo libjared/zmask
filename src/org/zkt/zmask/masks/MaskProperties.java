@@ -1,5 +1,5 @@
 /*
- * MekoPlus.java
+ * MaskProperties.java
  * Copyright (C) 2010-2011  Jonas Eriksson
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,55 +18,32 @@
 
 package org.zkt.zmask.masks;
 
-import java.awt.image.BufferedImage;
-import org.zkt.zmask.Image;
 import org.zkt.zmask.utils.Property;
-import org.zkt.zmask.utils.PropertyException;
-import org.zkt.zmask.utils.PropertyHandler;
 
 /**
- * The meko plus mask
+ * Class for storing mask properties
  *
  * @author zqad
  */
-public class MekoPlus implements Mask {
-	private MekoCommon common;
+public class MaskProperties {
+	private String name, description;
+	private Property[] properties;
 
-	public MekoPlus() {
-		common = MekoCommon.getInstance();
+	public MaskProperties(String name, String description, Property[] properties) {
+		this.name = name;
+		this.description = description;
+		this.properties	= properties;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getDescription() {
-		return "Meko+";
-	}
-
-	public boolean needClone() {
-		return false;
-	}
-
-	public boolean needWhole() {
-		return false;
-	}
-
-	public boolean runBare() {
-		return false;
-	}
-
-	public BufferedImage runMask(BufferedImage image) {
-		return common.runMeko(image, true);
-	}
-
-	public void runMask(Image image) {
-		throw new UnsupportedOperationException("Not supported.");
+		return description;
 	}
 
 	public Property[] getProperties() {
-		return null;
+		return properties;
 	}
-
-	public PropertyHandler getPropertyHandler() {
-		return null;
-	}
-
-
 }
