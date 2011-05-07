@@ -86,10 +86,10 @@ public class RunMask {
 	public static List<MaskProperties> getAllMaskProperties() {
 		List<MaskProperties> mp = new LinkedList<MaskProperties>();
 		for (String key : masks.keySet()) {
-			Property[] pa = masks.get(key).getProperties();
+			Mask mask =  masks.get(key);
+			Property[] pa = mask.getProperties();
 			if (pa != null)
-				// TODO: description
-				mp.add(new MaskProperties(key, key, pa));
+				mp.add(new MaskProperties(key, mask.getDescription(), pa));
 		}
 		return mp;
 	}
