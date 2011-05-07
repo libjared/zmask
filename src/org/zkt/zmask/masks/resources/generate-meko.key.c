@@ -1,4 +1,27 @@
-// TODO: copyright and ref to mekomask.c
+/*
+ * generate-meko.key.c
+ * Copyright (C) 2010  Jonas Eriksson
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * This file is *heavily* based on gimpmask.c by Hirotsuna Mizuno, (c) 1998,
+ * with additions by Michael J Hammel 2002. gimpmask.c is licensed under GPLv2.
+ * URL: http://registry.gimp.org/node/24496
+ */
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
