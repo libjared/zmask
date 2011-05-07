@@ -135,6 +135,9 @@ public class ZmaskFrame extends JFrame {
 		RunMask.init();
 
 		setSize(700, 500);
+
+		/* Do initial button refresh */
+		refreshButtons();
 	}
 
 	public void showAboutBox() {
@@ -469,6 +472,7 @@ public class ZmaskFrame extends JFrame {
 		settingsPane.setName("settingsPane");
 
 		add(mainPanel);
+
 	}
 
 	private class UndoRedoMouseAdapter extends MouseAdapter {
