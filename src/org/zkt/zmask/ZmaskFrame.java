@@ -501,17 +501,17 @@ public class ZmaskFrame extends JFrame {
 		Image ci = State.getCurrentImage();
 		if (ci == null) {
 			cgImageActive.setEnabled(false);
+			cgChanged.setEnabled(false);
+			cgUndoPossible.setEnabled(false);
+			cgRedoPossible.setEnabled(false);
+			cgSelectionActive.setEnabled(false);
 		}
 		else {
 			cgImageActive.setEnabled(true);
 			cgChanged.setEnabled(ci.isChanged());
 			cgUndoPossible.setEnabled(ci.isUndoPossible());
 			cgRedoPossible.setEnabled(ci.isRedoPossible());
-
-			if (ci.getSelection() != null)
-				cgSelectionActive.setEnabled(true);
-			else
-				cgSelectionActive.setEnabled(false);
+			cgSelectionActive.setEnabled(ci.getSelection() != null);
 		}
 	}
 
