@@ -41,6 +41,20 @@ import org.zkt.zmask.utils.PropertyHandler;
  */
 public class FL implements Mask {
 
+	private boolean useInvert;
+	private PropertyDescription[] propertyArray;
+	private PropertyHandler propertyHandler;
+
+	public FL() {
+		useInvert = true;
+
+		propertyHandler = new FLPropertyHandler(this);
+		PropertyDescription[] propertyArray = {
+			new PropertyDescription("useInvert", PropertyDescription.TYPE_BOOLEAN, "Use invert", propertyHandler),
+		};
+		this.propertyArray = propertyArray;
+	}
+
 	public String getDescription() {
 		return "FL mask";
 	}
@@ -74,7 +88,7 @@ public class FL implements Mask {
 			for (int x = 0; x < cellWidth; x++) {
 				FLTransformResult tr = table.transform(x, y);
 				BufferedImage subImage = image.getSubimage(x * bsWidth, y * bsHeight, bsWidth, bsHeight);
-				if (tr.inv)
+				if (tr.inv && useInvert)
 					subImage = bio.filter(subImage, null);
 				g.drawImage(subImage, tr.x * bsWidth, tr.y * bsHeight, null);
 			}
@@ -171,6 +185,33 @@ public class FL implements Mask {
 	}
 
 	public PropertyDescription[] getProperties() {
-		return null;
+		return propertyArray;
+	}
+
+	private static class FLPropertyHandler implements PropertyHandler {
+		FL fl;
+
+		protected FLPropertyHandler(FL fl) {
+			this.fl = fl;
+		}
+
+		public void setProperty(String key, Object value) throws PropertyException {
+			if (key.equals("useInvert"))
+				fl.useInvert = ((Boolean)value).booleanValue();
+			else
+				throw new PropertyException(key);
+		}
+
+		public Object getProperty(String key) throws PropertyException {
+			if (key.equals("useInvert"))
+				return new Boolean(fl.useInvert);
+
+			throw new PropertyException(key);
+		}
+
+		public boolean checkProperty(String key, Object value) throws PropertyException {
+			// All values are valid
+			return true;
+		}
 	}
 }
