@@ -18,8 +18,6 @@
 
 package org.zkt.zmask.utils;
 
-import org.zkt.zmask.utils.PropertyException;
-
 /**
  * Interface for properties
  *

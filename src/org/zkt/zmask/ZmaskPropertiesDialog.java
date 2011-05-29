@@ -20,6 +20,8 @@ package org.zkt.zmask;
 
 import javax.swing.ActionMap;
 import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.HashMap;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -37,6 +39,7 @@ import java.awt.ComponentOrientation;
 import org.zkt.zmask.utils.Resources;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyHandler;
+import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.masks.RunMask;
 import org.zkt.zmask.masks.MaskProperties;
 
@@ -50,13 +53,16 @@ public class ZmaskPropertiesDialog extends JDialog {
 
 	private ActionMap actions;
 	private Resources resources;
+	private Map<PropertyDescription, JCheckBox> jcheckboxes;
 
 	public ZmaskPropertiesDialog(Frame parent) {
 		super(parent);
 
 		actions = new ActionMap();
 		resources = new Resources("org.zkt.zmask.resources.Properties");
+		jcheckboxes = new HashMap<PropertyDescription, JCheckBox>();
 		initComponents();
+		synchronize(false); // TODO: read from disk before this
 		setSize(400, 300);
 	}
 
@@ -139,27 +145,74 @@ public class ZmaskPropertiesDialog extends JDialog {
 	}
 
 	private void ok() {
+		synchronize(true);
+		dispose();
 	}
 
 	private void apply() {
+		synchronize(true);
 	}
 
 	private void cancel() {
 		dispose();
-		// TODO: reset settings
+		synchronize(false);
 	}
 
 	private JPanel constructComponents(PropertyDescription[] pa) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		for (PropertyDescription p : pa) {
+			String key = p.getKey();
+
+			/*
+			 * Booleans (JCheckBoxes)
+			 */
 			if (p.getType() == PropertyDescription.TYPE_BOOLEAN) {
 				JCheckBox cb = new JCheckBox(p.getText());
-				cb.setName(p.getKey());
+				cb.setName(key);
 				panel.add(cb);
+				jcheckboxes.put(p, cb);
 			}
 		}
 
 		return panel;
+	}
+
+	private void synchronize(boolean toMask) {
+
+		/*
+		 * Booleans (JCheckBoxes)
+		 */
+		for (Map.Entry<PropertyDescription, JCheckBox> e : jcheckboxes.entrySet()) {
+			PropertyDescription p = e.getKey();
+			JCheckBox cb = e.getValue();
+			PropertyHandler ph = p.getHandler();
+			String pKey = p.getKey();
+
+			boolean cbValue = cb.isSelected();
+			boolean pValue = false;
+			try {
+				pValue = (Boolean)ph.getProperty(pKey);
+			}
+			catch (PropertyException pe) {
+				// TODO
+				pe.printStackTrace();
+			}
+
+			if (cbValue != pValue) {
+				if (toMask) {
+					try {
+						ph.setProperty(pKey, cbValue);
+					}
+					catch (PropertyException pe) {
+						// TODO
+						pe.printStackTrace();
+					}
+				}
+				else {
+					cb.setSelected(pValue);
+				}
+			}
+		}
 	}
 }

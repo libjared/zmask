@@ -49,7 +49,7 @@ public class Q0 implements Mask {
 		/* Cannot assign this directly for whatever reason */
 		PropertyDescription[] propertyArray = {
 			new PropertyDescription("runVerticalGlass", PropertyDescription.TYPE_BOOLEAN, "Run vertical glass", propertyHandler),
-			new PropertyDescription("runVerticalGlass", PropertyDescription.TYPE_BOOLEAN, "Run horizontal glass", propertyHandler),
+			new PropertyDescription("runHorizontalGlass", PropertyDescription.TYPE_BOOLEAN, "Run horizontal glass", propertyHandler),
 			new PropertyDescription("runInvert", PropertyDescription.TYPE_BOOLEAN, "Run invert", propertyHandler),
 		};
 		this.propertyArray = propertyArray;
