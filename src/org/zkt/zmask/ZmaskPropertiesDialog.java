@@ -35,7 +35,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.ComponentOrientation;
 import org.zkt.zmask.utils.Resources;
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyDescription;
+import org.zkt.zmask.utils.PropertyHandler;
 import org.zkt.zmask.masks.RunMask;
 import org.zkt.zmask.masks.MaskProperties;
 
@@ -145,14 +146,15 @@ public class ZmaskPropertiesDialog extends JDialog {
 
 	private void cancel() {
 		dispose();
+		// TODO: reset settings
 	}
 
-	private JPanel constructComponents(Property[] pa) {
+	private JPanel constructComponents(PropertyDescription[] pa) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		for (Property p : pa) {
-			if (p.getType() == Property.TYPE_BOOLEAN) {
-				JCheckBox cb = new JCheckBox(p.getDescription());
+		for (PropertyDescription p : pa) {
+			if (p.getType() == PropertyDescription.TYPE_BOOLEAN) {
+				JCheckBox cb = new JCheckBox(p.getText());
 				cb.setName(p.getKey());
 				panel.add(cb);
 			}

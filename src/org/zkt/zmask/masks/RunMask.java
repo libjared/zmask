@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.LinkedList;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyDescription;
 
 /**
  * Runs a mask on image/selection
@@ -87,7 +87,7 @@ public class RunMask {
 		List<MaskProperties> mp = new LinkedList<MaskProperties>();
 		for (String key : masks.keySet()) {
 			Mask mask =  masks.get(key);
-			Property[] pa = mask.getProperties();
+			PropertyDescription[] pa = mask.getProperties();
 			if (pa != null)
 				mp.add(new MaskProperties(key, mask.getDescription(), pa));
 		}

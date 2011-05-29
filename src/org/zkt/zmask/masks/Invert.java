@@ -23,7 +23,7 @@ import java.awt.image.BufferedImageOp;
 import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
 
@@ -87,11 +87,7 @@ public class Invert implements Mask {
 
 	}
 
-	public Property[] getProperties() {
-		return null;
-	}
-
-	public PropertyHandler getPropertyHandler() {
+	public PropertyDescription[] getProperties() {
 		return null;
 	}
 }

@@ -21,7 +21,7 @@ package org.zkt.zmask.masks;
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
 import org.zkt.zmask.utils.PropertyHandler;
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyDescription;
 
 /**
  * Parent interface for masks
@@ -43,7 +43,5 @@ public interface Mask {
 
 	public String getDescription();
 
-	public PropertyHandler getPropertyHandler();
-
-	public Property[] getProperties();
+	public PropertyDescription[] getProperties();
 }

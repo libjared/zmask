@@ -18,7 +18,7 @@
 
 package org.zkt.zmask.masks;
 
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyDescription;
 
 /**
  * Class for storing mask properties
@@ -27,9 +27,9 @@ import org.zkt.zmask.utils.Property;
  */
 public class MaskProperties {
 	private String name, description;
-	private Property[] properties;
+	private PropertyDescription[] properties;
 
-	public MaskProperties(String name, String description, Property[] properties) {
+	public MaskProperties(String name, String description, PropertyDescription[] properties) {
 		this.name = name;
 		this.description = description;
 		this.properties	= properties;
@@ -43,7 +43,7 @@ public class MaskProperties {
 		return description;
 	}
 
-	public Property[] getProperties() {
+	public PropertyDescription[] getProperties() {
 		return properties;
 	}
 }

@@ -18,25 +18,26 @@
 
 package org.zkt.zmask.utils;
 
-import org.zkt.zmask.utils.PropertyException;
-
 /**
  * Property
  *
  * @author zqad
  */
-public class Property {
+public class PropertyDescription {
 
 	public static final int TYPE_BOOLEAN = 0;
 
 	private String key;
 	private int type;
-	private String description;
+	private String text;
+	private PropertyHandler handler;
 
-	public Property(String key, int type, String description) {
+	public PropertyDescription(String key, int type, String text,
+			PropertyHandler handler) {
 		this.key = key;
 		this.type = type;
-		this.description = description;
+		this.text = text;
+		this.handler = handler;
 	}
 
 	public String getKey() {
@@ -47,8 +48,11 @@ public class Property {
 		return type;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getText() {
+		return text;
 	}
 
+	public PropertyHandler getHandler() {
+		return handler;
+	}
 }

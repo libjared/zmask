@@ -20,7 +20,7 @@ package org.zkt.zmask.masks;
 
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.utils.Property;
+import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
 
@@ -30,10 +30,10 @@ import org.zkt.zmask.utils.PropertyHandler;
  * @author zqad
  */
 public class Q0 implements Mask {
-	protected boolean runHorizontalGlass, runVerticalGlass, runInvert;
+	private boolean runHorizontalGlass, runVerticalGlass, runInvert;
 	private Mask horizontalGlass, verticalGlass, invert;
 	private Q0PropertyHandler propertyHandler;
-	private Property[] propertyArray;
+	private PropertyDescription[] propertyArray;
 
 	public Q0() {
 		horizontalGlass = new HorizontalGlass();
@@ -47,10 +47,10 @@ public class Q0 implements Mask {
 		propertyHandler = new Q0PropertyHandler(this);
 
 		/* Cannot assign this directly for whatever reason */
-		Property[] propertyArray = {
-			new Property("runVerticalGlass", Property.TYPE_BOOLEAN, "Run vertical glass"),
-			new Property("runVerticalGlass", Property.TYPE_BOOLEAN, "Run horizontal glass"),
-			new Property("runInvert", Property.TYPE_BOOLEAN, "Run invert"),
+		PropertyDescription[] propertyArray = {
+			new PropertyDescription("runVerticalGlass", PropertyDescription.TYPE_BOOLEAN, "Run vertical glass", propertyHandler),
+			new PropertyDescription("runVerticalGlass", PropertyDescription.TYPE_BOOLEAN, "Run horizontal glass", propertyHandler),
+			new PropertyDescription("runInvert", PropertyDescription.TYPE_BOOLEAN, "Run invert", propertyHandler),
 		};
 		this.propertyArray = propertyArray;
 	}
@@ -88,12 +88,8 @@ public class Q0 implements Mask {
 		throw new UnsupportedOperationException("Not supported.");
 	}
 
-	public Property[] getProperties() {
+	public PropertyDescription[] getProperties() {
 		return propertyArray;
-	}
-
-	public PropertyHandler getPropertyHandler() {
-		return propertyHandler;
 	}
 
 	private static class Q0PropertyHandler implements PropertyHandler {
