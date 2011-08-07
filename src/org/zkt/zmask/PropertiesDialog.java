@@ -77,16 +77,13 @@ public class PropertiesDialog extends JDialog {
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 
-		/* General panel */
-		JPanel generalPanel = new JPanel();
-		//constructSettings(generalPanel, generalPropertiesArray);
-
-
 		/* Tabbed panel */
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab(resources.getString("general.title"), null,
-				  generalPanel,
-				  resources.getString("general.description"));
+
+		/* General panel */
+		GeneralProperties gp = GeneralProperties.getInstance();
+		JPanel generalTab = constructComponents(gp.getProperties());
+		tabbedPane.addTab(gp.getName(), null, generalTab, gp.getDescription());
 
 		/* Add all mask properties */
 		for (MaskProperties mp : RunMask.getAllMaskProperties()) {
@@ -185,9 +182,6 @@ public class PropertiesDialog extends JDialog {
 	 */
 	private void synchronize(boolean toMask) {
 
-		/*if (toMask)
-			 TODO: save to disk */
-
 		/*
 		 * Booleans (JCheckBoxes)
 		 */
@@ -222,5 +216,9 @@ public class PropertiesDialog extends JDialog {
 				}
 			}
 		}
+
+		/*if (toMask)
+			 TODO: save to disk */
+
 	}
 }
