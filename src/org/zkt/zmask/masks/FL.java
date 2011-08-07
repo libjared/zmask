@@ -29,7 +29,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.LookupOp;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.State;
+import org.zkt.zmask.GeneralProperties;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
@@ -73,8 +73,8 @@ public class FL implements Mask {
 
 	public BufferedImage runMask(BufferedImage image) {
 		// Get parameters
-		int bsWidth = State.getBlockSize().width;
-		int bsHeight = State.getBlockSize().height;
+		int bsWidth = GeneralProperties.getInstance().getBlockSize().width;
+		int bsHeight = GeneralProperties.getInstance().getBlockSize().height;
 		int width = image.getWidth();
 		int height = image.getHeight();
 		int cellWidth = width / bsWidth;

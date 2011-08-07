@@ -21,7 +21,7 @@ package org.zkt.zmask.masks;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.State;
+import org.zkt.zmask.GeneralProperties;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
@@ -56,7 +56,7 @@ public class VerticalGlass implements Mask {
 			image.getType());
 		Graphics2D g = (Graphics2D)bi.getGraphics();
 		g.scale(-1.0, 1.0);
-		int bs = State.getBlockSize().width;
+		int bs = GeneralProperties.getInstance().getBlockSize().width;
 		for (int i = 0; i <= width - bs; i += bs)
 			g.drawImage(image.getSubimage(i, 0, bs, height), -1 * i - bs, 0, null);
 

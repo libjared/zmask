@@ -35,12 +35,15 @@ import org.zkt.zmask.utils.Resources;
 public class GeneralProperties {
 
 	private PropertyDescription[] propertyArray;
-	private GeneralPropertyHandler propertyHandler;
+	private GeneralPropertiesHandler propertyHandler;
 	private static GeneralProperties instance = null;
 	private Resources resources;
 
+	/* Properties */
+	protected static Dimension blockSize = new Dimension(8, 8);
+
 	private GeneralProperties() {
-		propertyHandler = new GeneralPropertyHandler();
+		propertyHandler = new GeneralPropertiesHandler(this);
 		resources = new Resources("org.zkt.zmask.resources.Properties");
 
 		/* Cannot assign this directly for whatever reason */
@@ -69,12 +72,34 @@ public class GeneralProperties {
 		return propertyArray;
 	}
 
-	private static class GeneralPropertyHandler implements PropertyHandler {
+	/**
+	 * Get the block size
+	 *
+	 * @return the block size
+	 */
+	public Dimension getBlockSize() {
+		return blockSize;
+	}
 
+	/**
+	 * Set the block size
+	 *
+	 * @param blockSize new block size
+	 */
+	public void setBlockSize(Dimension blockSize) {
+		this.blockSize = blockSize;
+	}
+
+
+	private static class GeneralPropertiesHandler implements PropertyHandler {
+
+		GeneralProperties generalProperties;
 		SpinnerNumberModel bsModel;
 
-		protected GeneralPropertyHandler() {
-			Integer value = new Integer(State.getBlockSize().height);
+		protected GeneralPropertiesHandler(GeneralProperties generalProperties) {
+			this.generalProperties = generalProperties;
+
+			Integer value = new Integer(generalProperties.blockSize.height);
 			Integer min = new Integer(2);
 			Integer step = new Integer(1);
 			bsModel = new SpinnerNumberModel(value, min, null, step);
@@ -84,10 +109,9 @@ public class GeneralProperties {
 			if (key.equals("blockSize")) {
 				int bs = ((Integer)value).intValue();
 				bsModel.setValue(new Integer(bs));
-				Dimension oldBlockSize = State.getBlockSize();
 				Dimension newBlockSize = new Dimension(bs, bs);
-				if (!oldBlockSize.equals(newBlockSize))
-					State.setBlockSize(newBlockSize);
+				if (!generalProperties.blockSize.equals(newBlockSize))
+					generalProperties.setBlockSize(newBlockSize);
 			}
 			else {
 				throw new PropertyException(key);
@@ -96,7 +120,7 @@ public class GeneralProperties {
 
 		public Object getProperty(String key) throws PropertyException {
 			if (key.equals("blockSize"))
-				return new Integer(State.getBlockSize().height);
+				return new Integer(generalProperties.blockSize.height);
 
 			throw new PropertyException(key);
 		}

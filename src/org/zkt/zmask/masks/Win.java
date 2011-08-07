@@ -21,7 +21,7 @@ package org.zkt.zmask.masks;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.State;
+import org.zkt.zmask.GeneralProperties;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
@@ -74,7 +74,7 @@ public class Win implements Mask {
 		BufferedImage bi = new BufferedImage(width, height,
 			image.getType());
 		Graphics2D g = (Graphics2D)bi.getGraphics();
-		int bs = State.getBlockSize().width * 2;
+		int bs = GeneralProperties.getInstance().getBlockSize().width * 2;
 		for (int i = 0; i <= width - bs; i += bs)
 			for (int j = 0; j < bs; j += 1)
 				g.drawImage(image.getSubimage(i + j, 0, 1, height), i + TRANS[j], 0, null);

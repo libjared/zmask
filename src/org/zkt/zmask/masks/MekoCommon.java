@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import org.zkt.zmask.State;
+import org.zkt.zmask.GeneralProperties;
 
 /**
  * Common logic for the Meko+/- masks
@@ -118,8 +118,8 @@ public class MekoCommon {
 
 	public BufferedImage runMeko(BufferedImage image, boolean doPlus) {
 		// Get parameters
-		int bsWidth = State.getBlockSize().width * 2;
-		int bsHeight = State.getBlockSize().height * 2;
+		int bsWidth = GeneralProperties.getInstance().getBlockSize().width * 2;
+		int bsHeight = GeneralProperties.getInstance().getBlockSize().height * 2;
 		int width = image.getWidth();
 		int height = image.getHeight();
 		int cellWidth = width / bsWidth;

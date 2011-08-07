@@ -26,7 +26,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import org.zkt.zmask.Image;
-import org.zkt.zmask.State;
+import org.zkt.zmask.GeneralProperties;
 
 /**
  * Select tool
@@ -47,7 +47,7 @@ public class Select implements Tool {
 
 	public Select(int x, int y, Image image, int mouseButton, int modifiers) {
 		// Fit to block size
-		Dimension bs = State.getBlockSize();
+		Dimension bs = GeneralProperties.getInstance().getBlockSize();
 		x = (x + bs.width / 2);
 		x -= x % bs.width;
 		y = (y + bs.height / 2);
@@ -96,7 +96,7 @@ public class Select implements Tool {
 
 	public void update(int dstX, int dstY, int modifiers) {
 		// Fit to block size
-		Dimension bs = State.getBlockSize();
+		Dimension bs = GeneralProperties.getInstance().getBlockSize();
 		dstX = (dstX + bs.width / 2);
 		dstX -= dstX % bs.width;
 		dstY = (dstY + bs.height / 2);

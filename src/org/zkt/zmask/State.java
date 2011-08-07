@@ -46,27 +46,8 @@ public class State {
 	}
 
 	/* Variables */
-	protected static Dimension blockSize = new Dimension(8, 8);
 	protected static JDesktopPane mainDesktopPane;
 	private static Tools tool = Tools.SELECT_TOOL;
-
-	/**
-	 * Get the block size
-	 *
-	 * @return the block size
-	 */
-	public static Dimension getBlockSize() {
-		return blockSize;
-	}
-
-	/**
-	 * Set the block size
-	 *
-	 * @param blockSize new block size
-	 */
-	public static void setBlockSize(Dimension blockSize) {
-		State.blockSize = blockSize;
-	}
 
 	/**
 	 * Get the tool currently in use

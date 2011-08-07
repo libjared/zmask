@@ -115,7 +115,7 @@ public class Statusbar extends JPanel implements Serializable {
 
 	public AttributedString getCursorAttributedString(Image image) {
 		// Calculate position in blocks
-		Dimension blockSize = State.getBlockSize();
+		Dimension blockSize = GeneralProperties.getInstance().getBlockSize();
 		int blockX = cx / blockSize.width;
 		int blockY = cy / blockSize.height;
 		int remX = cx % blockSize.width;
