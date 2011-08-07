@@ -40,6 +40,7 @@ import org.zkt.zmask.utils.Resources;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyHandler;
 import org.zkt.zmask.utils.PropertyException;
+import org.zkt.zmask.utils.PropertyManager;
 import org.zkt.zmask.masks.RunMask;
 import org.zkt.zmask.masks.MaskProperties;
 
@@ -62,7 +63,8 @@ public class PropertiesDialog extends JDialog {
 		resources = new Resources("org.zkt.zmask.resources.Properties");
 		jcheckboxes = new HashMap<PropertyDescription, JCheckBox>();
 		initComponents();
-		synchronize(false); // TODO: read from disk before this
+		PropertyManager.loadProperties();
+		synchronize(false);
 		setSize(400, 300);
 	}
 
@@ -217,8 +219,8 @@ public class PropertiesDialog extends JDialog {
 			}
 		}
 
-		/*if (toMask)
-			 TODO: save to disk */
+		if (toMask)
+			PropertyManager.saveProperties();
 
 	}
 }
