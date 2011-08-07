@@ -1,5 +1,5 @@
 /*
- * Property.java
+ * PropertyDescription.java
  * Copyright (C) 2010-2011  Jonas Eriksson
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 package org.zkt.zmask.utils;
 
 /**
- * Property
+ * PropertyDescription
  *
  * @author zqad
  */
