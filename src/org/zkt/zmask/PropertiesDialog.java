@@ -1,5 +1,5 @@
 /*
- * ZmaskProperties.java
+ * PropertiesDialog.java
  * Copyright (C) 2011  Jonas Eriksson
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,14 +48,14 @@ import org.zkt.zmask.masks.MaskProperties;
  *
  * @author zqad
  */
-public class ZmaskPropertiesDialog extends JDialog {
+public class PropertiesDialog extends JDialog {
 	public static final long serialVersionUID = 1;
 
 	private ActionMap actions;
 	private Resources resources;
 	private Map<PropertyDescription, JCheckBox> jcheckboxes;
 
-	public ZmaskPropertiesDialog(Frame parent) {
+	public PropertiesDialog(Frame parent) {
 		super(parent);
 
 		actions = new ActionMap();
@@ -178,7 +178,15 @@ public class ZmaskPropertiesDialog extends JDialog {
 		return panel;
 	}
 
+	/**
+	 * Synchronizes settings from GUI to mask and disk, or from mask to GUI.
+	 *
+	 * @param toMask If true, the sync is done from the masks to the GUI.
+	 */
 	private void synchronize(boolean toMask) {
+
+		/*if (toMask)
+			 TODO: save to disk */
 
 		/*
 		 * Booleans (JCheckBoxes)

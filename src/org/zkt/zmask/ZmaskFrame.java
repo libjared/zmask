@@ -662,7 +662,7 @@ public class ZmaskFrame extends JFrame {
 	// Show properties dialog
 	public void propertiesAction() {
 		if (propertiesDialog == null) {
-			propertiesDialog = new ZmaskPropertiesDialog(this);
+			propertiesDialog = new PropertiesDialog(this);
 			propertiesDialog.setLocationRelativeTo(this);
 		}
 		propertiesDialog.setVisible(true);
