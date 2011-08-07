@@ -129,11 +129,21 @@ public class PropertyManager {
 						}
 					}
 					else {
+						String value = props.getProperty(key);
 						if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
-							String value = props.getProperty(key);
 							if (value != null) {
 								try {
 									ph.setProperty(pd.getKey(), Boolean.valueOf(value));
+								}
+								catch (PropertyException pe) {
+									// TODO
+								}
+							}
+						}
+						else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
+							if (value != null) {
+								try {
+									ph.setProperty(pd.getKey(), Integer.valueOf(value));
 								}
 								catch (PropertyException pe) {
 									// TODO
