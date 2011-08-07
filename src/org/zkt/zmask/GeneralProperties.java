@@ -19,6 +19,8 @@
 package org.zkt.zmask;
 
 import java.awt.image.BufferedImage;
+import java.awt.Dimension;
+import javax.swing.SpinnerNumberModel;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
@@ -43,6 +45,7 @@ public class GeneralProperties {
 
 		/* Cannot assign this directly for whatever reason */
 		PropertyDescription[] propertyArray = {
+			new PropertyDescription("blockSize", PropertyDescription.TYPE_SPINNER, "Block size", propertyHandler),
 		};
 		this.propertyArray = propertyArray;
 	}
@@ -68,20 +71,42 @@ public class GeneralProperties {
 
 	private static class GeneralPropertyHandler implements PropertyHandler {
 
+		SpinnerNumberModel bsModel;
+
 		protected GeneralPropertyHandler() {
+			Integer value = new Integer(State.getBlockSize().height);
+			Integer min = new Integer(2);
+			Integer step = new Integer(1);
+			bsModel = new SpinnerNumberModel(value, min, null, step);
 		}
 
 		public void setProperty(String key, Object value) throws PropertyException {
+			if (key.equals("blockSize")) {
+				int bs = ((Integer)value).intValue();
+				bsModel.setValue(new Integer(bs));
+				Dimension oldBlockSize = State.getBlockSize();
+				Dimension newBlockSize = new Dimension(bs, bs);
+				if (!oldBlockSize.equals(newBlockSize))
+					State.setBlockSize(newBlockSize);
+			}
+			else {
 				throw new PropertyException(key);
+			}
 		}
 
 		public Object getProperty(String key) throws PropertyException {
+			if (key.equals("blockSize"))
+				return new Integer(State.getBlockSize().height);
+
 			throw new PropertyException(key);
 		}
 
-		public boolean checkProperty(String key, Object value) throws PropertyException {
-			// All values are valid
-			return true;
+		public Object getModel(String key) throws PropertyException {
+			if (key.equals("blockSize"))
+				return bsModel;
+			else
+				throw new PropertyException(key);
 		}
+
 	}
 }

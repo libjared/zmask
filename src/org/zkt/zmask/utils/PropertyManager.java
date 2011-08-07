@@ -98,6 +98,17 @@ public class PropertyManager {
 						}
 					}
 				}
+				else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
+					String value = props.getProperty(key);
+					if (value != null) {
+						try {
+							ph.setProperty(pd.getKey(), Integer.valueOf(value));
+						}
+						catch (PropertyException pe) {
+							// TODO
+						}
+					}
+				}
 			}
 		}
 

@@ -26,6 +26,7 @@ package org.zkt.zmask.utils;
 public class PropertyDescription {
 
 	public static final int TYPE_BOOLEAN = 0;
+	public static final int TYPE_SPINNER = 1;
 
 	private String key;
 	private int type;

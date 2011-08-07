@@ -26,10 +26,14 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.BoxLayout;
+import javax.swing.SpinnerModel;
 import java.awt.Frame;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -55,6 +59,7 @@ public class PropertiesDialog extends JDialog {
 	private ActionMap actions;
 	private Resources resources;
 	private Map<PropertyDescription, JCheckBox> jcheckboxes;
+	private Map<PropertyDescription, JSpinner> jspinners;
 
 	public PropertiesDialog(Frame parent) {
 		super(parent);
@@ -62,6 +67,7 @@ public class PropertiesDialog extends JDialog {
 		actions = new ActionMap();
 		resources = new Resources("org.zkt.zmask.resources.Properties");
 		jcheckboxes = new HashMap<PropertyDescription, JCheckBox>();
+		jspinners = new HashMap<PropertyDescription, JSpinner>();
 		initComponents();
 		PropertyManager.loadProperties();
 		synchronize(false);
@@ -172,6 +178,30 @@ public class PropertiesDialog extends JDialog {
 				panel.add(cb);
 				jcheckboxes.put(p, cb);
 			}
+			else if (p.getType() == PropertyDescription.TYPE_SPINNER) {
+				JSpinner s = new JSpinner();
+				JLabel sl = new JLabel(p.getText() + ":");
+				JPanel sp = new JPanel();
+				sp.setLayout(new FlowLayout(FlowLayout.LEFT));
+				sp.add(sl, BorderLayout.LINE_START);
+				sp.add(s, BorderLayout.LINE_START);
+
+				s.setName(key);
+
+				PropertyHandler ph = p.getHandler();
+				try {
+					Object smo = ph.getModel(p.getKey());
+					if (smo != null)
+						s.setModel((SpinnerModel)smo);
+				}
+				catch (PropertyException pe) {
+					// TODO
+					pe.printStackTrace();
+				}
+
+				panel.add(sp);
+				jspinners.put(p, s);
+			}
 		}
 
 		return panel;
@@ -215,6 +245,41 @@ public class PropertiesDialog extends JDialog {
 				}
 				else {
 					cb.setSelected(pValue);
+				}
+			}
+		}
+
+		/*
+		 * Spinners (JSpinners)
+		 */
+		for (Map.Entry<PropertyDescription, JSpinner> e : jspinners.entrySet()) {
+			PropertyDescription p = e.getKey();
+			JSpinner s = e.getValue();
+			PropertyHandler ph = p.getHandler();
+			String pKey = p.getKey();
+
+			int sValue = ((Integer)s.getValue()).intValue();
+			int pValue = 0;
+			try {
+				pValue = ((Integer)ph.getProperty(pKey)).intValue();
+			}
+			catch (PropertyException pe) {
+				// TODO
+				pe.printStackTrace();
+			}
+
+			if (sValue != pValue) {
+				if (toMask) {
+					try {
+						ph.setProperty(pKey, sValue);
+					}
+					catch (PropertyException pe) {
+						// TODO
+						pe.printStackTrace();
+					}
+				}
+				else {
+					s.setValue(new Integer(pValue));
 				}
 			}
 		}

@@ -26,5 +26,14 @@ package org.zkt.zmask.utils;
 public interface PropertyHandler {
 	public void setProperty(String key, Object value) throws PropertyException;
 	public Object getProperty(String key) throws PropertyException;
-	public boolean checkProperty(String key, Object value) throws PropertyException;
+
+	/**
+	 * Get model of a certain property, or null if no model for the property.
+	 *
+	 * For a property of type spinner, this is assumed to be of interface
+	 * SpinnerModel.
+	 *
+	 * @param key Property key
+	 */
+	public Object getModel(String key) throws PropertyException;
 }

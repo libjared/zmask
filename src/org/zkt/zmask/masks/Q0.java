@@ -121,9 +121,8 @@ public class Q0 implements Mask {
 			throw new PropertyException(key);
 		}
 
-		public boolean checkProperty(String key, Object value) throws PropertyException {
-			// All values are valid
-			return true;
+		public Object getModel(String key) throws PropertyException {
+			return null;
 		}
 	}
 }
