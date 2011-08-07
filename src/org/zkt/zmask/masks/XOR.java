@@ -34,7 +34,22 @@ import org.zkt.zmask.utils.PropertyHandler;
  */
 public class XOR implements Mask {
 
+	protected static boolean r = true;
+	protected static boolean g = true;
+	protected static boolean b = true;
+	private PropertyDescription[] propertyArray;
+	private XORPropertyHandler propertyHandler;
+
 	public XOR() {
+		propertyHandler = new XORPropertyHandler(this);
+
+		/* Cannot assign this directly for whatever reason */
+		PropertyDescription[] propertyArray = {
+			new PropertyDescription("r", PropertyDescription.TYPE_BOOLEAN, "Affect red channel", propertyHandler),
+			new PropertyDescription("g", PropertyDescription.TYPE_BOOLEAN, "Affect green channel", propertyHandler),
+			new PropertyDescription("b", PropertyDescription.TYPE_BOOLEAN, "Affect blue channel", propertyHandler),
+		};
+		this.propertyArray = propertyArray;
 	}
 
 	public String getDescription() {
@@ -75,9 +90,9 @@ public class XOR implements Mask {
 			if (dst == null)
 				dst = new int[src.length];
 
-			dst[0] = src[0] ^ 0x80;
-			dst[1] = src[1] ^ 0x80;
-			dst[2] = src[2] ^ 0x80;
+			dst[0] = r ? src[0] ^ 0x80 : src[0];
+			dst[1] = g ? src[1] ^ 0x80 : src[1];
+			dst[2] = b ? src[2] ^ 0x80 : src[2];
 
 			for (int i = 3; i < src.length; i++)
 				dst[i] = src[i];
@@ -88,6 +103,41 @@ public class XOR implements Mask {
 	}
 
 	public PropertyDescription[] getProperties() {
-		return null;
+		return propertyArray;
+	}
+
+	private static class XORPropertyHandler implements PropertyHandler {
+		XOR xor;
+
+		protected XORPropertyHandler(XOR xor) {
+			this.xor = xor;
+		}
+
+		public void setProperty(String key, Object value) throws PropertyException {
+			if (key.equals("r"))
+				xor.r = ((Boolean)value).booleanValue();
+			else if (key.equals("g"))
+				xor.g = ((Boolean)value).booleanValue();
+			else if (key.equals("b"))
+				xor.b = ((Boolean)value).booleanValue();
+			else
+				throw new PropertyException(key);
+		}
+
+		public Object getProperty(String key) throws PropertyException {
+			if (key.equals("r"))
+				return new Boolean(xor.r);
+			else if (key.equals("g"))
+				return new Boolean(xor.g);
+			else if (key.equals("b"))
+				return new Boolean(xor.b);
+
+			throw new PropertyException(key);
+		}
+
+		public boolean checkProperty(String key, Object value) throws PropertyException {
+			// All values are valid
+			return true;
+		}
 	}
 }
