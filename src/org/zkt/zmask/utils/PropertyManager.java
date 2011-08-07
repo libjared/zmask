@@ -39,8 +39,6 @@ import org.zkt.zmask.utils.PropertyException;
  */
 public class PropertyManager {
 
-	private static final String PROPERTIES_FILE = "zmask.properties";
-
 	public static void saveProperties() {
 		synchronize(true);
 	}
@@ -50,10 +48,21 @@ public class PropertyManager {
 	}
 
 	private static void synchronize(boolean toDisk) {
+		String path = ".zmaskrc";
+
+		/* Overload user-supplied settings */
+		try {
+			path = System.getProperty("user.home") + "/.zmaskrc";
+		}
+		catch (SecurityException e) {
+			// TODO: alert user
+			e.printStackTrace();
+		}
+
 		Properties props = new Properties();
 
 		try {
-			FileInputStream in = new FileInputStream(PROPERTIES_FILE);
+			FileInputStream in = new FileInputStream(path);
 			props.load(in);
 			in.close();
 		}
@@ -127,7 +136,7 @@ public class PropertyManager {
 
 		if (toDisk) {
 			try {
-				FileOutputStream out = new FileOutputStream(PROPERTIES_FILE);
+				FileOutputStream out = new FileOutputStream(path);
 				props.store(out, "Zmask properties");
 				out.close();
 			}

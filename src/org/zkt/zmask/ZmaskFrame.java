@@ -57,6 +57,7 @@ import org.zkt.zmask.masks.RunMask;
 import org.zkt.zmask.utils.ComponentGroup;
 import org.zkt.zmask.utils.Resources;
 import org.zkt.zmask.utils.FileManager;
+import org.zkt.zmask.utils.PropertyManager;
 
 /**
  * The application's main frame.
@@ -133,6 +134,7 @@ public class ZmaskFrame extends JFrame {
 		// Init state
 		State.setMainDesktopPane(mainDesktopPane);
 		RunMask.init();
+		PropertyManager.loadProperties();
 
 		setSize(700, 500);
 

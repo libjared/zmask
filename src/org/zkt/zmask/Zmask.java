@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import org.zkt.zmask.utils.PropertyManager;
 
 /**
  * The application's main class.
@@ -66,30 +67,6 @@ public class Zmask {
 			}
 			catch (Exception e) {
 				// This will not fail, promise
-			}
-
-			/* Overload user-supplied settings */
-			try {
-				path = System.getProperty("user.home") + "/.zmaskrc";
-			}
-			catch (SecurityException e) {
-				// TODO: alert user
-				e.printStackTrace();
-				return properties;
-			}
-
-			try {
-				is = new FileInputStream(path);
-				properties.load(is);
-				is.close();
-
-			}
-			catch (FileNotFoundException e) {
-				// It's ok.
-			}
-			catch (IOException e) {
-				// TODO: alert user
-				e.printStackTrace();
 			}
 		}
 
