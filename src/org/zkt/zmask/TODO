@@ -1,3 +1,12 @@
+Before 0.1 release:
+* Select all / none does not work
+* Zoom in View menu does not work
+  - In
+  - Out
+  - 1:1
+  - Fit to window
+* Warn on close changed images
+
 Improvments
 * Webstart
   - Test (and fix)
@@ -18,13 +27,6 @@ Improvments
     - More methods in the respective class?
     - A more clean helper?
 * Shortcut keys - does not work
-* zoom (view menu)
-  - 1:1
-  - fit to window
-  - pre def zoom levels
-* image menu
- - select all
- - select none
 * Rename image class? to avoid confustion with image interface..
 * Preview in open dialog
 * Hand tool resets when outside the window
@@ -35,7 +37,6 @@ Improvments
   - No idea how that layout works, but it is very static. replace.
   - License box not wide enough
 * Double-click with select to do "wand" selection
-* Close should warn if image is changed but not saved
 
 Masks
 * CP [detect?]
@@ -46,7 +47,7 @@ Testing
 * Unit tests for history handling (index images and such)
 
 Features
-* Solve dialouge (avoid printing unneccessary steps)
+* Solve dialogue (avoid printing unneccessary steps)
   - zoom out blocksize times and use blocksize = 1px
   - only handle the selected area
 * Tree-based undo
