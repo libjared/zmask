@@ -89,7 +89,7 @@ public class RunMask {
 			Mask mask =  masks.get(key);
 			PropertyDescription[] pa = mask.getProperties();
 			if (pa != null)
-				mp.add(new MaskProperties(key, mask.getDescription(), pa));
+				mp.add(new MaskProperties(key, key, mask.getDescription(), pa));
 		}
 		return mp;
 	}

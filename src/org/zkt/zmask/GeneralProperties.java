@@ -24,6 +24,7 @@ import javax.swing.SpinnerNumberModel;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
+import org.zkt.zmask.utils.PropertyContainer;
 import org.zkt.zmask.utils.Resources;
 
 /**
@@ -32,8 +33,9 @@ import org.zkt.zmask.utils.Resources;
  *
  * @author zqad
  */
-public class GeneralProperties {
+public class GeneralProperties implements PropertyContainer {
 
+	private static final String key = "general";
 	private PropertyDescription[] propertyArray;
 	private GeneralPropertiesHandler propertyHandler;
 	private static GeneralProperties instance = null;
@@ -58,6 +60,10 @@ public class GeneralProperties {
 			instance = new GeneralProperties();
 		}
 		return instance;
+	}
+
+	public String getKey() {
+		return key;
 	}
 
 	public String getName() {

@@ -19,20 +19,27 @@
 package org.zkt.zmask.masks;
 
 import org.zkt.zmask.utils.PropertyDescription;
+import org.zkt.zmask.utils.PropertyContainer;
 
 /**
  * Class for storing mask properties
  *
  * @author zqad
  */
-public class MaskProperties {
-	private String name, description;
+public class MaskProperties implements PropertyContainer {
+	private String key, name, description;
 	private PropertyDescription[] properties;
 
-	public MaskProperties(String name, String description, PropertyDescription[] properties) {
+	public MaskProperties(String key, String name, String description,
+			PropertyDescription[] properties) {
+		this.key = key;
 		this.name = name;
 		this.description = description;
 		this.properties	= properties;
+	}
+
+	public String getKey() {
+		return key;
 	}
 
 	public String getName() {

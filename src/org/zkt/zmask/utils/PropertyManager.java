@@ -75,102 +75,13 @@ public class PropertyManager {
 
 		/* General properties */
                 GeneralProperties gp = GeneralProperties.getInstance();
-		for (PropertyDescription pd : gp.getProperties()) {
-			PropertyHandler ph = pd.getHandler();
-			String key = gp.getName() + "." + pd.getKey();
-			if (toDisk) {
-				try {
-					props.setProperty(key, ph.getProperty(pd.getKey()).toString());
-				}
-				catch (PropertyException pe) {
-					// TODO
-				}
-			}
-			else {
-				String value = props.getProperty(key);
-				if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
-					if (value != null) {
-						try {
-							ph.setProperty(pd.getKey(), Boolean.valueOf(value));
-						}
-						catch (PropertyException pe) {
-							// TODO
-						}
-					}
-				}
-				else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
-					if (value != null) {
-						try {
-							ph.setProperty(pd.getKey(), Integer.valueOf(value));
-						}
-						catch (PropertyException pe) {
-							// TODO
-						}
-					}
-				}
-				else if (pd.getType() == PropertyDescription.TYPE_RADIOS) {
-					if (value != null) {
-						try {
-							ph.setProperty(pd.getKey(), value);
-						}
-						catch (PropertyException pe) {
-							// TODO
-						}
-					}
-				}
-			}
-		}
+		synchronizeProperties(gp, props, toDisk);
 
-		/* For all masks */
+		/* All mask properties */
 		for (MaskProperties mp : RunMask.getAllMaskProperties()) {
-
-			/* For all properties in mask */
-			for (PropertyDescription pd : mp.getProperties()) {
-				String key = mp.getName() + "." + pd.getKey();
-				PropertyHandler ph = pd.getHandler();
-				if (toDisk) {
-					try {
-						props.setProperty(key, ph.getProperty(pd.getKey()).toString());
-					}
-					catch (PropertyException pe) {
-						// TODO
-					}
-				}
-				else {
-					String value = props.getProperty(key);
-					if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
-						if (value != null) {
-							try {
-								ph.setProperty(pd.getKey(), Boolean.valueOf(value));
-							}
-							catch (PropertyException pe) {
-								// TODO
-							}
-						}
-					}
-					else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
-						if (value != null) {
-							try {
-								ph.setProperty(pd.getKey(), Integer.valueOf(value));
-							}
-							catch (PropertyException pe) {
-								// TODO
-							}
-						}
-					}
-					else if (pd.getType() == PropertyDescription.TYPE_RADIOS) {
-						if (value != null) {
-							try {
-								ph.setProperty(pd.getKey(), value);
-							}
-							catch (PropertyException pe) {
-								// TODO
-							}
-						}
-					}
-				}
-			}
+			synchronizeProperties(mp, props, toDisk);
 		}
+
 
 		if (toDisk) {
 			try {
@@ -187,4 +98,36 @@ public class PropertyManager {
 		}
 	}
 
+	private static void synchronizeProperties(PropertyContainer pc, Properties props,
+			boolean toDisk) {
+		for (PropertyDescription pd : pc.getProperties()) {
+			PropertyHandler ph = pd.getHandler();
+			String key = pc.getKey() + "." + pd.getKey();
+			try {
+				if (toDisk) {
+					props.setProperty(key, ph.getProperty(pd.getKey()).toString());
+				}
+				else {
+					String value = props.getProperty(key);
+					if (value == null)
+						continue;
+
+					switch (pd.getType()) {
+					case PropertyDescription.TYPE_BOOLEAN:
+						ph.setProperty(pd.getKey(), Boolean.valueOf(value));
+						break;
+					case PropertyDescription.TYPE_SPINNER:
+						ph.setProperty(pd.getKey(), Integer.valueOf(value));
+						break;
+					case PropertyDescription.TYPE_RADIOS:
+						ph.setProperty(pd.getKey(), value);
+						break;
+					}
+				}
+			}
+			catch (PropertyException pe) {
+				// TODO
+			}
+		}
+	}
 }
