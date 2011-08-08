@@ -102,7 +102,7 @@ public class RGBRotate implements Mask {
 					break;
 				case GB:
 					tmp = dst[1];
-					dst[1] = dst[1];
+					dst[1] = dst[2];
 					dst[2] = tmp;
 					break;
 			}
