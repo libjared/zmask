@@ -87,8 +87,8 @@ public class PropertyManager {
 				}
 			}
 			else {
+				String value = props.getProperty(key);
 				if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
-					String value = props.getProperty(key);
 					if (value != null) {
 						try {
 							ph.setProperty(pd.getKey(), Boolean.valueOf(value));
@@ -99,10 +99,19 @@ public class PropertyManager {
 					}
 				}
 				else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
-					String value = props.getProperty(key);
 					if (value != null) {
 						try {
 							ph.setProperty(pd.getKey(), Integer.valueOf(value));
+						}
+						catch (PropertyException pe) {
+							// TODO
+						}
+					}
+				}
+				else if (pd.getType() == PropertyDescription.TYPE_RADIOS) {
+					if (value != null) {
+						try {
+							ph.setProperty(pd.getKey(), value);
 						}
 						catch (PropertyException pe) {
 							// TODO
@@ -119,35 +128,43 @@ public class PropertyManager {
 			for (PropertyDescription pd : mp.getProperties()) {
 				String key = mp.getName() + "." + pd.getKey();
 				PropertyHandler ph = pd.getHandler();
-				if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
-					if (toDisk) {
-						try {
-							props.setProperty(key, ph.getProperty(pd.getKey()).toString());
-						}
-						catch (PropertyException pe) {
-							// TODO
-						}
+				if (toDisk) {
+					try {
+						props.setProperty(key, ph.getProperty(pd.getKey()).toString());
 					}
-					else {
-						String value = props.getProperty(key);
-						if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
-							if (value != null) {
-								try {
-									ph.setProperty(pd.getKey(), Boolean.valueOf(value));
-								}
-								catch (PropertyException pe) {
-									// TODO
-								}
+					catch (PropertyException pe) {
+						// TODO
+					}
+				}
+				else {
+					String value = props.getProperty(key);
+					if (pd.getType() == PropertyDescription.TYPE_BOOLEAN) {
+						if (value != null) {
+							try {
+								ph.setProperty(pd.getKey(), Boolean.valueOf(value));
+							}
+							catch (PropertyException pe) {
+								// TODO
 							}
 						}
-						else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
-							if (value != null) {
-								try {
-									ph.setProperty(pd.getKey(), Integer.valueOf(value));
-								}
-								catch (PropertyException pe) {
-									// TODO
-								}
+					}
+					else if (pd.getType() == PropertyDescription.TYPE_SPINNER) {
+						if (value != null) {
+							try {
+								ph.setProperty(pd.getKey(), Integer.valueOf(value));
+							}
+							catch (PropertyException pe) {
+								// TODO
+							}
+						}
+					}
+					else if (pd.getType() == PropertyDescription.TYPE_RADIOS) {
+						if (value != null) {
+							try {
+								ph.setProperty(pd.getKey(), value);
+							}
+							catch (PropertyException pe) {
+								// TODO
 							}
 						}
 					}

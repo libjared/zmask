@@ -27,6 +27,7 @@ import org.zkt.zmask.Image;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyHandler;
+import org.zkt.zmask.utils.RadioGroupModel;
 
 /**
  * Rotate RGB of the selection
@@ -34,6 +35,21 @@ import org.zkt.zmask.utils.PropertyHandler;
  * @author zqad
  */
 public class RGBRotate implements Mask {
+
+	private RGBRotatePropertyHandler propertyHandler;
+	private PropertyDescription[] propertyArray;
+	private Rotation rotation;
+
+	public RGBRotate() {
+		rotation = Rotation.RGB;
+		propertyHandler = new RGBRotatePropertyHandler(this);
+
+		/* Cannot assign this directly for whatever reason */
+		PropertyDescription[] propertyArray = {
+			new PropertyDescription("rotation", PropertyDescription.TYPE_RADIOS, "Affected channels", propertyHandler),
+		};
+		this.propertyArray = propertyArray;
+	}
 
 	public String getDescription() {
 		return "RGB rotate";
@@ -52,7 +68,7 @@ public class RGBRotate implements Mask {
 	}
 
 	public BufferedImage runMask(BufferedImage src) {
-		BufferedImageOp bio = new LookupOp(new RotateTable(0, 1, Rotation.RGB), null);
+		BufferedImageOp bio = new LookupOp(new RotateTable(0, 1, rotation), null);
 		BufferedImage dst = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
 		bio.filter(src, dst);
 		return dst;
@@ -116,6 +132,72 @@ public class RGBRotate implements Mask {
 	}
 
 	public PropertyDescription[] getProperties() {
-		return null;
+		return propertyArray;
+	}
+
+	private static class RGBRotatePropertyHandler implements PropertyHandler {
+		RGBRotate rgbrotate;
+		RadioGroupModel rotationModel;
+
+		protected RGBRotatePropertyHandler(RGBRotate rgbrotate) {
+			this.rgbrotate = rgbrotate;
+
+			rotationModel = new RadioGroupModel();
+			rotationModel.addRadio("RGB", "R -> G -> B -> R", true);
+			rotationModel.addRadio("RG", "R -> G -> R", false);
+			rotationModel.addRadio("RB", "R -> B -> R", false);
+			rotationModel.addRadio("GB", "G -> B -> G", false);
+		}
+
+		private String rotationToString(Rotation rotation) {
+			switch (rotation) {
+				case RGB:
+					return "RGB";
+				case RG:
+					return "RG";
+				case RB:
+					return "RB";
+				case GB:
+					return "GB";
+			}
+
+			return null;
+		}
+
+		private Rotation stringToRotation(String r) {
+			if (r.equals("RGB"))
+				return Rotation.RGB;
+			else if (r.equals("RG"))
+				return Rotation.RG;
+			else if (r.equals("RB"))
+				return Rotation.RB;
+			else if (r.equals("GB"))
+				return Rotation.GB;
+			else
+				return null;
+		}
+
+		public void setProperty(String key, Object value) throws PropertyException {
+			if (key.equals("rotation")) {
+				rgbrotate.rotation = stringToRotation((String)value);
+			}
+			else {
+				throw new PropertyException(key);
+			}
+		}
+
+		public Object getProperty(String key) throws PropertyException {
+			if (key.equals("rotation"))
+				return rotationToString(rgbrotate.rotation);
+
+			throw new PropertyException(key);
+		}
+
+		public Object getModel(String key) throws PropertyException {
+			if (key.equals("rotation"))
+				return rotationModel;
+
+			throw new PropertyException(key);
+		}
 	}
 }

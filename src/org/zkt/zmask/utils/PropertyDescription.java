@@ -27,6 +27,7 @@ public class PropertyDescription {
 
 	public static final int TYPE_BOOLEAN = 0;
 	public static final int TYPE_SPINNER = 1;
+	public static final int TYPE_RADIOS = 2;
 
 	private String key;
 	private int type;

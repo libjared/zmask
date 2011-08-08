@@ -22,9 +22,12 @@ import javax.swing.ActionMap;
 import java.util.ResourceBundle;
 import java.util.Map;
 import java.util.HashMap;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
@@ -40,11 +43,13 @@ import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.ComponentOrientation;
+import org.zkt.zmask.utils.RadioGroupModel;
 import org.zkt.zmask.utils.Resources;
 import org.zkt.zmask.utils.PropertyDescription;
 import org.zkt.zmask.utils.PropertyHandler;
 import org.zkt.zmask.utils.PropertyException;
 import org.zkt.zmask.utils.PropertyManager;
+import org.zkt.zmask.utils.RadioGroupModel;
 import org.zkt.zmask.masks.RunMask;
 import org.zkt.zmask.masks.MaskProperties;
 
@@ -60,6 +65,7 @@ public class PropertiesDialog extends JDialog {
 	private Resources resources;
 	private Map<PropertyDescription, JCheckBox> jcheckboxes;
 	private Map<PropertyDescription, JSpinner> jspinners;
+	private Map<PropertyDescription, RadioGroupModel> radioGroupModels;
 
 	public PropertiesDialog(Frame parent) {
 		super(parent);
@@ -68,6 +74,7 @@ public class PropertiesDialog extends JDialog {
 		resources = new Resources("org.zkt.zmask.resources.Properties");
 		jcheckboxes = new HashMap<PropertyDescription, JCheckBox>();
 		jspinners = new HashMap<PropertyDescription, JSpinner>();
+		radioGroupModels = new HashMap<PropertyDescription, RadioGroupModel>();
 		initComponents();
 		PropertyManager.loadProperties();
 		synchronize(false);
@@ -169,9 +176,6 @@ public class PropertiesDialog extends JDialog {
 		for (PropertyDescription p : pa) {
 			String key = p.getKey();
 
-			/*
-			 * Booleans (JCheckBoxes)
-			 */
 			if (p.getType() == PropertyDescription.TYPE_BOOLEAN) {
 				JCheckBox cb = new JCheckBox(p.getText());
 				cb.setName(key);
@@ -201,6 +205,36 @@ public class PropertiesDialog extends JDialog {
 
 				panel.add(sp);
 				jspinners.put(p, s);
+			}
+			else if (p.getType() == PropertyDescription.TYPE_RADIOS) {
+				JPanel rp = new JPanel();
+				rp.setLayout(new BoxLayout(rp, BoxLayout.Y_AXIS));
+
+				rp.setBorder(BorderFactory.createTitledBorder(p.getText()));
+
+				PropertyHandler ph = p.getHandler();
+
+				ButtonGroup bg = new ButtonGroup();
+				RadioGroupModel rgm;
+				try {
+					rgm = (RadioGroupModel)ph.getModel(p.getKey());
+				}
+				catch (PropertyException pe) {
+					// TODO
+					pe.printStackTrace();
+					continue;
+				}
+				rgm.setButtonGroup(bg);
+				JRadioButton rb;
+				for (RadioGroupModel.Button button : rgm.getButtons()) {
+					boolean selected = false;
+					rb = new JRadioButton(button.getText(), selected);
+					bg.add(rb);
+					rp.add(rb);
+					rgm.addButtonModel(button.getKey(), rb.getModel());
+				}
+				panel.add(rp);
+				radioGroupModels.put(p, rgm);
 			}
 		}
 
@@ -284,6 +318,39 @@ public class PropertiesDialog extends JDialog {
 			}
 		}
 
+		/*
+		 * Radios (RadioModels)
+		 */
+		for (Map.Entry<PropertyDescription, RadioGroupModel> e : radioGroupModels.entrySet()) {
+			PropertyDescription p = e.getKey();
+			RadioGroupModel rgm = e.getValue();
+			PropertyHandler ph = p.getHandler();
+			String pKey = p.getKey();
+
+			String rgmValue = rgm.getSelectedKey();
+			String pValue = null;
+			try {
+				pValue = (String)ph.getProperty(pKey);
+			}
+			catch (PropertyException pe) {
+				// TODO
+				pe.printStackTrace();
+			}
+
+			if (toMask) {
+				try {
+					ph.setProperty(pKey, rgmValue);
+					rgm.setSelected(rgmValue);
+				}
+				catch (PropertyException pe) {
+					// TODO
+					pe.printStackTrace();
+				}
+			}
+			else {
+				rgm.setSelected(pValue);
+			}
+		}
 		if (toMask)
 			PropertyManager.saveProperties();
 
