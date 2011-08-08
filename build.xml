@@ -3,7 +3,7 @@
     vim:sw=4:ts=4:et:
 -->
 <project name="zmask" default="default" basedir=".">
-    <property name="version" value="0.1alpha1"/>
+    <property name="version" value="0.1alpha2"/>
 
     <description>Builds, tests, and runs the project zmask.</description>
     <property name="src" value="src"/>
