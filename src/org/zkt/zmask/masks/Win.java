@@ -74,7 +74,7 @@ public class Win implements Mask {
 		BufferedImage bi = new BufferedImage(width, height,
 			image.getType());
 		Graphics2D g = (Graphics2D)bi.getGraphics();
-		int bs = GeneralProperties.getInstance().getBlockSize().width * 2;
+		int bs = 16;
 		for (int i = 0; i <= width - bs; i += bs)
 			for (int j = 0; j < bs; j += 1)
 				g.drawImage(image.getSubimage(i + j, 0, 1, height), i + TRANS[j], 0, null);
