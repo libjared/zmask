@@ -116,6 +116,7 @@ public class Image {
 		if (points > 100) {
 			indexImage = new BufferedImage(imageSize.width,
 				imageSize.height, lastImage.getImage().getType());
+			this.drawImage((Graphics2D)indexImage.getGraphics(), 0, 0);
 			points = 0;
 		}
 
@@ -173,6 +174,8 @@ public class Image {
 			Point position = ic.getPosition();
 			int x = position == null ? 0 : position.x;
 			int y = position == null ? 0 : position.y;
+			if (ic.getIndexImage() != null)
+				g.drawImage(ic.getIndexImage(), null, 0 + dispX, 0 + dispY);
 			g.drawImage(ic.getImage(), null, x + dispX, y + dispY);
 		}
 	}
