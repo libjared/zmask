@@ -1,5 +1,6 @@
 *~
 .*.swp
+.version
 build/
 dist/
 doc/

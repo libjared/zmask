@@ -3,13 +3,51 @@
     vim:sw=4:ts=4:et:
 -->
 <project name="zmask" default="default" basedir=".">
-    <property name="version" value="0.1alpha2"/>
-
     <description>Builds, tests, and runs the project zmask.</description>
     <property name="src" value="src"/>
     <property name="build" value="build"/>
     <property name="dist" value="dist"/>
     <property name="doc" value="doc"/>
+
+    <loadfile property="file.version" srcFile=".version" failonerror="false" />
+
+    <target name="version" depends="git.revision">
+        <!-- Check that we at least have one version source -->
+        <fail>
+            <condition>
+                <and>
+                    <or>
+                        <not>
+                            <isset property="file.version"/>
+                        </not>
+                        <equals arg1="${file.version}" arg2="unknown" />
+                        <equals arg1="${file.version}" arg2="\${repository.version}" />
+                    </or>
+                    <or>
+                        <not>
+                            <isset property="repository.version" />
+                        </not>
+                        <equals arg1="${repository.version}" arg2="unknown" />
+                    </or>
+                </and>
+            </condition>
+        </fail>
+
+        <!-- Fetch version -->
+        <condition property="version" value="${file.version}"
+                else="${repository.version}">
+                <or>
+                    <not>
+                        <isset property="repository.version" />
+                    </not>
+                    <equals arg1="${repository.version}" arg2="unknown" />
+                </or>
+        </condition>
+        <echo message="Building version: ${version}" />
+
+        <!-- Write version to .version -->
+        <echo message="${version}" file=".version" />
+    </target>
 
     <target name="default" depends="compile" />
     <target name="dist" depends="jar, war, src-tar" />
@@ -20,7 +58,7 @@
         <mkdir dir="${dist}"/>
     </target>
 
-    <target name="compile" depends="init">
+    <target name="compile" depends="init, version">
         <mkdir dir="${build}/classes"/>
         <javac srcdir="${src}" destdir="${build}/classes" debug="on"
                 classpath="" includeantruntime="false">
@@ -40,21 +78,21 @@
         </propertyfile>
     </target>
 
-    <target name="jar" depends="compile">
-        <jar destfile="${dist}/Zmask.jar" basedir="${build}/classes">
+    <target name="jar" depends="compile, version">
+        <jar destfile="${dist}/zmask-${version}.jar" basedir="${build}/classes">
             <manifest>
                 <attribute name="Main-Class" value="org.zkt.zmask.Zmask"/>
             </manifest>
         </jar>
     </target>
 
-    <target name="war" depends="compile">
-        <war warfile="${dist}/Zmask.war" webxml="${src}/web.xml">
+    <target name="war" depends="compile, version">
+        <war warfile="${dist}/zmask-${version}.war" webxml="${src}/web.xml">
             <classes dir="${build}/classes"/>
         </war>
     </target>
 
-    <target name="src-tar" depends="init, doc">
+    <target name="src-tar" depends="init, doc, version">
         <tar destfile="${dist}/zmask-${version}.tar.gz" compression="gzip">
             <tarfileset dir="." prefix="zmask-${version}">
                 <!-- Include everything but misc, plus generated docs -->
@@ -62,11 +100,12 @@
                 <include name="doc/**"/>
                 <include name="COPYING"/>
                 <include name="build.xml"/>
+                <include name=".version"/>
             </tarfileset>
         </tar>
     </target>
 
-    <target name="doc">
+    <target name="doc" depends="version">
         <mkdir dir="${doc}"/>
         <javadoc packagenames="org.zkt.zmask.*"
                    sourcepath="${src}"
@@ -84,4 +123,22 @@
         <delete dir="${doc}"/>
     </target>
 
+    <!-- Git describe target, stolen from
+         http://stackoverflow.com/questions/2974106/how-to-lookup-the-latest-git-commit-hash-from-an-ant-build-script
+         -->
+    <available file=".git" type="dir" property="git.present"/>
+    <target name="git.revision" description="Store git revision in ${repository.version}" if="git.present">
+        <exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+            <arg value="describe"/>
+            <arg value="--tags"/>
+            <arg value="--always"/>
+            <arg value="HEAD"/>
+        </exec>
+        <condition property="repository.version" value="${git.revision}" else="unknown">
+            <and>
+                <isset property="git.revision"/>
+                <length string="${git.revision}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+    </target>
 </project>
