@@ -770,19 +770,19 @@ public class ZmaskFrame extends JFrame {
 
 	// Menu-only actions
 	public void zoomInAction() {
-		// TODO
+		State.getCurrentImage().getImagePanel().zoomIn();
 	}
 
 	public void zoomOutAction() {
-		// TODO
+		State.getCurrentImage().getImagePanel().zoomOut();
 	}
 
 	public void zoom11Action() {
-		// TODO
+		State.getCurrentImage().getImagePanel().zoom11();
 	}
 
 	public void zoomFitAction() {
-		// TODO
+		State.getCurrentImage().getImagePanel().zoomFit();
 	}
 
 	public void selectAllAction() {

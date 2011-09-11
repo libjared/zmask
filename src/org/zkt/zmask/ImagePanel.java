@@ -42,8 +42,6 @@ import org.zkt.zmask.tools.Zoom;
 public class ImagePanel extends JPanel {
 	public static final long serialVersionUID = 1;
 
-	private final double ZOOM_MAX = Math.pow(1.25, 7);
-	private final double ZOOM_MIN = Math.pow(0.8, 7);
 	private Image image;
 	private ImageWindow parentImageWindow;
 	private Statusbar statusbar;
@@ -56,14 +54,6 @@ public class ImagePanel extends JPanel {
 	}
 
 	public void setZoom(double zoom) {
-		// Limit zoom range
-		if (zoom < ZOOM_MIN) {
-			zoom = ZOOM_MIN;
-		}
-		else if (zoom > ZOOM_MAX) {
-			zoom = ZOOM_MAX;
-		}
-
 		this.zoom = zoom;
 
 		// Update with zoomed size
@@ -264,6 +254,27 @@ public class ImagePanel extends JPanel {
 
 	public void zoomOut(int n, Point imagePoint, Point windowPoint) {
 		factorZoom(0.8, n, imagePoint, windowPoint);
+	}
+
+	public void zoomIn() {
+		zoomIn(1, null, null);
+	}
+
+	public void zoomOut() {
+		zoomOut(1, null, null);
+	}
+
+	public void zoom11() {
+		setZoom(1.0);
+	}
+
+	public void zoomFit() {
+		double imageWidth = image.getImageWidth();
+		double imageHeight = image.getImageHeight();
+		// TODO: 3? This is just a quick hack. Fix it properly.
+		double spWidth = getScrollPane().getWidth() - 3;
+		double spHeight = getScrollPane().getHeight() - 3;
+		setZoom(Math.min(spWidth / imageWidth, spHeight / imageHeight));
 	}
 
 	private void factorZoom(double factor, int times, Point imagePoint, Point windowPoint) {
