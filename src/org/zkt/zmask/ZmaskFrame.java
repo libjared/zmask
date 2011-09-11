@@ -58,6 +58,9 @@ import org.zkt.zmask.utils.ComponentGroup;
 import org.zkt.zmask.utils.Resources;
 import org.zkt.zmask.utils.FileManager;
 import org.zkt.zmask.utils.PropertyManager;
+import org.zkt.zmask.tools.Select;
+import java.awt.Rectangle;
+import java.awt.Dimension;
 
 /**
  * The application's main frame.
@@ -786,11 +789,21 @@ public class ZmaskFrame extends JFrame {
 	}
 
 	public void selectAllAction() {
-		// TODO
+		Image image = State.getCurrentImage();
+		Dimension dim = GeneralProperties.getInstance().getBlockSize();
+		int width = image.getImageWidth() - 1; // Remove one to get end pixels
+		int height = image.getImageHeight() - 1;
+		Rectangle selection = new Rectangle(0, 0, width - width % dim.width, height - height % dim.height);
+		Select select = new Select(image, selection);
+		image.addTool(select, actionResources.getString("selectAll.short"));
+		select.commit(0);
 	}
 
 	public void selectNoneAction() {
-		// TODO
+		Image image = State.getCurrentImage();
+		Select select = new Select(image, new Rectangle(0, 0, 0, 0));
+		image.addTool(select, actionResources.getString("selectNone.short"));
+		select.commit(0);
 	}
 
 	public void quitAction() {
