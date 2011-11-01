@@ -170,7 +170,7 @@ public class MekoCommon {
 		public Table(Dimension dimension, int[] mekoKey) {
 			table = new KeyEntry[dimension.width * dimension.height];
 			for (int i = 0; i < dimension.width * dimension.height; i++)
-				table[i] = new KeyEntry(i, mekoKey[i]);
+				table[i] = new KeyEntry(i, mekoKey[i % mekoKey.length]);
 			Arrays.sort(table);
 			this.dimension = dimension;
 		}
