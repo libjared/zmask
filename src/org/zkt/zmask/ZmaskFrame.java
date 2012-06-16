@@ -580,46 +580,50 @@ public class ZmaskFrame extends JFrame {
 
 	}
 
-	private void saveImage(Image image, String format, File file) {
-		BufferedImage bi = new BufferedImage(image.getImageWidth(), image.getImageHeight(), image.getImageType());
-                image.drawImage((Graphics2D)bi.getGraphics(), 0, 0);
-
+	private boolean saveImage(Image image, String format, File file) {
+		image.setFileAndFormat(file, format);
+		return saveImage(image);
+	}
+	private boolean saveImage(Image image) {
 		try {
-			boolean result = FileManager.saveFile(bi, format, file);
-			if (!result)
-				JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveFormatError.text") + " '" + format + "'", resources.getString("fileSaveFormatError.title"), JOptionPane.ERROR_MESSAGE);
+			if (!image.save()) {
+				JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveFormatError.text") + " '" + image.getFormat() + "'", resources.getString("fileSaveFormatError.title"), JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveIOError.title"), resources.getString("fileSaveIOError.text"), JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
 
-		image.setFileAndFormat(file, format);
-		image.clearChanged();
+		return true;
 	}
 
-	public void saveAction() {
-		Image image = State.getCurrentImage();
-
+	public boolean saveAction(Image image) {
 		File source = image.getFile();
 		if (source == null) {
-			__saveAsAction(image);
+			return __saveAsAction(image);
 		}
 		else {
-			saveImage(image, image.getFormat(), source);
+			return saveImage(image, image.getFormat(), source);
 		}
 	}
 
-	private void __saveAsAction(Image image) {
+	public boolean saveAction() {
+		return saveAction(State.getCurrentImage());
+	}
+
+	private boolean __saveAsAction(Image image) {
 		int r = saveAsFileChooser.showOpenDialog(this);
 
 		if (r == JFileChooser.ERROR_OPTION) {
 			JOptionPane.showMessageDialog(State.getMainDesktopPane(), resources.getString("fileSaveFaultySelection.title"), resources.getString("fileSaveFaultySelection.text"), JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 
 		if (r != JFileChooser.APPROVE_OPTION)
-			return;
+			return false;
 
 		File selected = saveAsFileChooser.getSelectedFile();
                 String name = selected.getName();
@@ -631,7 +635,7 @@ public class ZmaskFrame extends JFrame {
                 }
 
 
-		saveImage(image, format, selected);
+		return saveImage(image, format, selected);
 	}
 
 	public void saveAsAction() {
@@ -640,9 +644,14 @@ public class ZmaskFrame extends JFrame {
 		__saveAsAction(image);
 	}
 
+	public boolean closeAction(Image image) {
+
+		image.getImagePanel().getParentImageWindow().close();
+		return true;
+	}
+
 	public void closeAction() {
-		// TODO
-		// image.isChanged();
+		closeAction(State.getCurrentImage());
 	}
 
 	// Undo, redo
@@ -807,7 +816,10 @@ public class ZmaskFrame extends JFrame {
 	}
 
 	public void quitAction() {
-		// TODO: ask if save
+		for (Image image : State.getAllImages()) {
+			if (!closeAction(image))
+				return;
+		}
 		System.exit(0);
 	}
 

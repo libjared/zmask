@@ -22,9 +22,13 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import java.io.IOException;
+
+import org.zkt.zmask.utils.Resources;
 
 /**
  * Window used to display an image panel
@@ -40,11 +44,15 @@ public class ImageWindow extends JInternalFrame {
 	private JScrollPane scrollPane;
 	private final int MIN_WIDTH = 100;
 	private final int MIN_HEIGHT = 100;
+	private Resources actionResources;
 
 	public ImageWindow(String filename, BufferedImage image,
 			Container parent) {
 		// Resizable, closable, maximizable and iconifiable
 		super(filename, true, true, true, true);
+
+		// Init resources
+		actionResources = new Resources("org.zkt.zmask.resources.ActionNames");
 
 		// Init close button
 		setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
@@ -128,7 +136,47 @@ public class ImageWindow extends JInternalFrame {
 		this.filename = filename;
 	}
 
-	public void close() {
+	public boolean save() {
+		try {
+			Image image = imagePanel.getImage();
+			if (!image.save()) {
+				JOptionPane.showMessageDialog(State.getMainDesktopPane(), actionResources.getString("fileSaveFormatError.text") + " '" + image.getFormat() + "'", actionResources.getString("fileSaveFormatError.title"), JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(State.getMainDesktopPane(), actionResources.getString("fileSaveIOError.title"), actionResources.getString("fileSaveIOError.text"), JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean close() {
+		Image image = imagePanel.getImage();
+		if (image.isChanged()) {
+			String options[] = { actionResources.getString("save.short"),
+				actionResources.getString("discard.short"),
+				actionResources.getString("cancel.short") };
+			int selection = JOptionPane.showOptionDialog(this, image.toString()
+					+ " has changes. Do you want to save?", "Changed image",
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null, options, options[0]);
+
+			System.out.println(">> " + selection);
+			switch (selection) {
+			case 0:
+				if (!save()) {
+					return false;
+				}
+				break;
+			case 2:
+				return false;
+			}
+
+		}
 		setVisible(false);
 		try {
 			// Strange that this is needed, since we do a remove..
@@ -139,6 +187,8 @@ public class ImageWindow extends JInternalFrame {
 		}
 		parent.remove(this);
 		State.refreshButtons();
+
+		return true;
 	}
 
 	public ImagePanel getImagePanel() {

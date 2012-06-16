@@ -33,6 +33,7 @@ import org.zkt.zmask.tools.Hand;
 import org.zkt.zmask.tools.Select;
 import org.zkt.zmask.tools.Tool;
 import org.zkt.zmask.tools.Zoom;
+import org.zkt.zmask.utils.Resources;
 
 /**
  * Panel used to display an image
@@ -116,6 +117,10 @@ public class ImagePanel extends JPanel {
 
 	public JScrollPane getScrollPane() {
 		return parentImageWindow.getScrollPane();
+	}
+
+	public ImageWindow getParentImageWindow() {
+		return parentImageWindow;
 	}
 
 	public boolean isChanged() {

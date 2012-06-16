@@ -24,12 +24,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Deque;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingDeque;
 import org.zkt.zmask.tools.Select;
 import org.zkt.zmask.tools.Tool;
+import org.zkt.zmask.utils.FileManager;
 
 /**
  * Represent an image
@@ -402,6 +404,18 @@ public class Image {
 		this.file = file;
 		this.format = format;
 		imagePanel.updateParentWindowTitle(file.getName());
+	}
+
+	public boolean save() throws IOException {
+		BufferedImage bi = new BufferedImage(imageSize.width, imageSize.height, getImageType());
+                drawImage((Graphics2D)bi.getGraphics(), 0, 0);
+
+		if (FileManager.saveFile(bi, format, file)) {
+			clearChanged();
+			return true;
+		}
+
+		return false;
 	}
 
 	public File getFile() {
