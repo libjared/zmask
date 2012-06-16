@@ -1,5 +1,11 @@
-Before 0.1 release:
-* Warn on close changed images
+Before 0.2 release:
+* Cleanup if-mess in ZmaskFrame
+* Shortcut keys - does not work
+* Save dialog should warn if jpeg|png and xor in path
+* Hand tool resets when outside the window
+* About dialog is crap
+  - No idea how that layout works, but it is very static. replace.
+  - License box not wide enough
 
 Improvments
 * Webstart
@@ -20,16 +26,10 @@ Improvments
       to be put in imagechange? Tool stroke in specific tool class?
     - More methods in the respective class?
     - A more clean helper?
-* Shortcut keys - does not work
 * Rename image class? to avoid confustion with image interface..
 * Preview in open dialog
-* Hand tool resets when outside the window
-* Save dialog should warn if jpeg|png and xor in path
 * Cut/Copy/Paste
   - http://www.velocityreviews.com/forums/t136873-cut-and-paste-images.html
-* About dialog is crap
-  - No idea how that layout works, but it is very static. replace.
-  - License box not wide enough
 * Double-click with select to do "wand" selection
 
 Masks
