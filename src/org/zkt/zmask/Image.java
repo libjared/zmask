@@ -411,4 +411,8 @@ public class Image {
 	public String getFormat() {
 		return format;
 	}
+
+	public String toString() {
+		return file.getName();
+	}
 }
